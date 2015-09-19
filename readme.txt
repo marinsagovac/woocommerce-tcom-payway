@@ -84,7 +84,8 @@ Click Save
 == Changelog ==
 - Integration with PayWay
 - Show credit cards
-- 2015 paywayy implementation with SHA512 and new payway API 1.0.7
+- 2015 payway implementation with SHA512 and new payway API 1.0.7
+- euro currency based on en_US in URI
 
 == Frequently Asked Questions ==
 No recent asked questions 
