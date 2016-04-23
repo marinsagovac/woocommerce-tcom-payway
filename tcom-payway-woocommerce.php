@@ -1,14 +1,14 @@
 <?php
 
 /*
-    Date: October 2016
-    Plugin Name: T-Com PayWay
-    Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
-    Description: T-Com PayWay payment gateway
-    Version: 0.6
-    Author: Marin Sagovac (Marin Šagovac)
-    Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
-*/
+ * Date: April 2016
+ * Plugin Name: T-Com PayWay
+ * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
+ * Description: T-Com PayWay payment gateway
+ * Version: 0.7
+ * Author: Marin Sagovac (Marin Šagovac)
+ * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
+ */
 
 if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
@@ -156,12 +156,38 @@ function woocommerce_tpayway_gateway() {
                 $wpdb->insert($table_name, array('transaction_id' => $order_id, 'response_code' => '', 'response_code_desc' => '', 'reason_code' => '', 'amount' => $order->order_total, 'or_date' => date('Y-m-d'), 'status' => ''), array('%s', '%d'));
             }
 
+	    switch ($woocommerce->customer->country) {
+		case 'HR':
+		case 'BA':
+		case 'RS':
+			$pgw_language = 'hr';
+			break;
+		case 'DE':
+			$pgw_language = 'de';
+			break;
+		case 'IT':
+			$pgw_language = 'it';
+			break;
+		case 'FR':
+			$pgw_language = 'fr';
+			break;
+		case 'RU':
+			$pgw_language = 'ru';
+			break;
+		default:
+			$pgw_language = 'en';
+	    }
+
             $order->order_total = $order->order_total;
             if ($woocommerce->customer->country == 'HR') {
                 if ($order->get_order_currency() == 'HRK') {
                     $order->order_total = $order->order_total;
                 }
             }
+            else
+            {
+		$order->order_total = $order->order_total;
+	    }
 
             $order_format_value = str_pad(($order->order_total * 100), 12, '0', STR_PAD_LEFT);
             $totalAmount = number_format($order->order_total, 2, '', '');
@@ -171,7 +197,7 @@ function woocommerce_tpayway_gateway() {
             $pgw_card_type_id = '1'; // tip kartice
             $secret_key = $this->AcqID; // Secret key
             $pgw_authorization_type = '0';
-            $pgw_language = '';
+            
             $pgw_shop_id = $this->ShopID;
             $pgw_order_id = $order_id;
             $pgw_amount = $totalAmount;
@@ -408,3 +434,4 @@ function jal_install_data_tpayway() {
 
 register_activation_hook(__FILE__, 'jal_install_tpayway');
 register_activation_hook(__FILE__, 'jal_install_data_tpayway');
+
