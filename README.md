@@ -14,6 +14,19 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 * Added T-Com PayWay cards types
 * Example [Form](https://github.com/marinsagovac/woocommerce-tcom-payway/blob/master/primjer_obrasca.png) configuration
 
+## RELEASES
+
+* Latest Release: [Download][https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest]
+* Release [0.6][https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.6]
+
+## CHANGELOG
+
+### 0.6
+
+* Fix currency by billing Country (not language localization URI)
+* Remove unused code
+* Cleaning up
+
 ## Contributing
 
 Thank you for considering contributing and developing features on our repository.
