@@ -393,8 +393,17 @@ function woocommerce_tpayway_gateway() {
 
                         wp_redirect($this->responce_url_sucess, 200);
                     } else {
-                        $order->update_status('failed');
-                        $order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
+
+                        if ($status == 3) {
+
+                            $order->update_status('cancelled', $this->getResponseCodes($_POST['pgw_result_code']));
+                            $order->add_order_note('Denied - Code' . $_POST['pgw_result_code']);
+                        } else {
+                            $order->update_status('failed', $this->getResponseCodes($_POST['pgw_result_code']));
+                            $order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
+                        }
+
+
                         $order->add_order_note($this->msg['message']);
 
                         global $wpdb;
@@ -408,9 +417,10 @@ function woocommerce_tpayway_gateway() {
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
                         $text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_fail.'");</script>';
-                        
+                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("' . $this->responce_url_fail . '");</script>';
+
                         echo $text;
+
                         exit;
                     }
                 }
