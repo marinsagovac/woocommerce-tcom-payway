@@ -1,29 +1,30 @@
 <?php
 
 /*
- * Date: April 2016
- * Plugin Name: T-Com PayWay
+ * Date: May 2016
+ * Plugin Name: WooCommerce T-Com PayWay
  * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * Version: 0.7
+ * Version: 0.8
  * Author: Marin Sagovac (Marin Šagovac)
  * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
  */
 
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
+if (!defined('ABSPATH'))
+    exit; // Exit if accessed directly
 
 add_action('plugins_loaded', 'woocommerce_tpayway_gateway', 0);
 
 function woocommerce_tpayway_gateway() {
-    
+
     if (!class_exists('WC_Payment_Gateway')) {
         return;
     }
-        
+
     class WC_TPAYWAY extends WC_Payment_Gateway {
 
         public function __construct() {
-            
+
             $plugin_dir = plugin_dir_url(__FILE__);
             $this->id = 'TPAYWAY';
             $this->icon = apply_filters('woocommerce_Paysecure_icon', '' . $plugin_dir . 'payway.png');
@@ -43,6 +44,7 @@ function woocommerce_tpayway_gateway() {
             $this->responce_url_sucess = $this->settings['responce_url_sucess'];
             $this->responce_url_fail = $this->settings['responce_url_fail'];
             $this->checkout_msg = $this->settings['checkout_msg'];
+            $this->woo_active = $this->settings['woo_active'];
 
             $this->msg['message'] = "";
             $this->msg['class'] = "";
@@ -58,6 +60,21 @@ function woocommerce_tpayway_gateway() {
         }
 
         function init_form_fields() {
+
+            if (is_plugin_active('woo-multi-currency/woo-multi-currency.php')) {
+                $woo_active = array(
+                    'title' => __('Use Woo Multi Currency conversion', 'ogn'),
+                    'type' => 'checkbox',
+                    'label' => __('Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'ognro'),
+                    'default' => 'no');
+            } else {
+                $woo_active = array(
+                    'title' => __('Use Woo Multi Currency conversion', 'ogn'),
+                    'type' => 'checkbox',
+                    'disabled' => true,
+                    'label' => __('Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'ognro'),
+                    'default' => 'no');
+            };
 
             $this->form_fields = array(
                 'enabled' => array(
@@ -104,7 +121,8 @@ function woocommerce_tpayway_gateway() {
                     'title' => __('Message redirect:', 'ognro'),
                     'type' => 'textarea',
                     'description' => __('Message to client when redirecting to PayWay page', 'ognro'),
-                    'default' => __('', 'ognro'))
+                    'default' => __('', 'ognro')),
+                'woo_active' => $woo_active,
             );
         }
 
@@ -145,49 +163,59 @@ function woocommerce_tpayway_gateway() {
             if ($check_oder > 0) {
                 $wpdb->update(
                         $table_name, array(
-                            'response_code' => '',
-                            'response_code_desc' => '',
-                            'reason_code' => '',
-                            'amount' => ($order->order_total),
-                            'or_date' => date('Y-m-d'),
-                            'status' => ''
+                    'response_code' => '',
+                    'response_code_desc' => '',
+                    'reason_code' => '',
+                    'amount' => ($order->order_total),
+                    'or_date' => date('Y-m-d'),
+                    'status' => ''
                         ), array('transaction_id' => $order_id));
             } else {
                 $wpdb->insert($table_name, array('transaction_id' => $order_id, 'response_code' => '', 'response_code_desc' => '', 'reason_code' => '', 'amount' => $order->order_total, 'or_date' => date('Y-m-d'), 'status' => ''), array('%s', '%d'));
             }
 
-	    switch ($woocommerce->customer->country) {
-		case 'HR':
-		case 'BA':
-		case 'RS':
-			$pgw_language = 'hr';
-			break;
-		case 'DE':
-			$pgw_language = 'de';
-			break;
-		case 'IT':
-			$pgw_language = 'it';
-			break;
-		case 'FR':
-			$pgw_language = 'fr';
-			break;
-		case 'RU':
-			$pgw_language = 'ru';
-			break;
-		default:
-			$pgw_language = 'en';
-	    }
+            switch ($woocommerce->customer->country) {
+                case 'HR':
+                case 'BA':
+                case 'RS':
+                    $pgw_language = 'hr';
+                    break;
+                case 'DE':
+                    $pgw_language = 'de';
+                    break;
+                case 'IT':
+                    $pgw_language = 'it';
+                    break;
+                case 'FR':
+                    $pgw_language = 'fr';
+                    break;
+                case 'RU':
+                    $pgw_language = 'ru';
+                    break;
+                default:
+                    $pgw_language = 'en';
+            }
 
             $order->order_total = $order->order_total;
             if ($woocommerce->customer->country == 'HR') {
                 if ($order->get_order_currency() == 'HRK') {
                     $order->order_total = $order->order_total;
                 }
+            } else {
+                $order->order_total = $order->order_total;
             }
-            else
-            {
-		$order->order_total = $order->order_total;
-	    }
+
+            if ($this->woo_active === "yes") {
+                if (isset($_COOKIE['wmc_current_currency'])) {
+
+                    $curr_symbole = get_woocommerce_currency();
+                    $selected_c = get_option('wmc_selected_currencies');
+
+                    if ($_COOKIE['wmc_current_currency'] !== 'HRK') {
+                        $order->order_total = $woocommerce->cart->total * (1 / $selected_c[$_COOKIE['wmc_current_currency']]["rate"]);
+                    }
+                }
+            }
 
             $order_format_value = str_pad(($order->order_total * 100), 12, '0', STR_PAD_LEFT);
             $totalAmount = number_format($order->order_total, 2, '', '');
@@ -197,7 +225,7 @@ function woocommerce_tpayway_gateway() {
             $pgw_card_type_id = '1'; // tip kartice
             $secret_key = $this->AcqID; // Secret key
             $pgw_authorization_type = '0';
-            
+
             $pgw_shop_id = $this->ShopID;
             $pgw_order_id = $order_id;
             $pgw_amount = $totalAmount;
@@ -216,21 +244,21 @@ function woocommerce_tpayway_gateway() {
             $pgw_email = $order->billing_email;
 
             $pgw_signature = hash('sha512', $method . $secret_key .
-                $pgw_shop_id . $secret_key .
-                $pgw_order_id . $secret_key .
-                $pgw_amount . $secret_key .
-                $pgw_authorization_type . $secret_key .
-                $pgw_language . $secret_key .
-                $pgw_success_url . $secret_key .
-                $pgw_failure_url . $secret_key .
-                $pgw_first_name . $secret_key .
-                $pgw_last_name . $secret_key .
-                $pgw_street . $secret_key .
-                $pgw_city . $secret_key .
-                $pgw_post_code . $secret_key .
-                $pgw_country . $secret_key .
-                $pgw_telephone . $secret_key .
-                $pgw_email . $secret_key
+                    $pgw_shop_id . $secret_key .
+                    $pgw_order_id . $secret_key .
+                    $pgw_amount . $secret_key .
+                    $pgw_authorization_type . $secret_key .
+                    $pgw_language . $secret_key .
+                    $pgw_success_url . $secret_key .
+                    $pgw_failure_url . $secret_key .
+                    $pgw_first_name . $secret_key .
+                    $pgw_last_name . $secret_key .
+                    $pgw_street . $secret_key .
+                    $pgw_city . $secret_key .
+                    $pgw_post_code . $secret_key .
+                    $pgw_country . $secret_key .
+                    $pgw_telephone . $secret_key .
+                    $pgw_email . $secret_key
             );
 
             $form_args = array(
@@ -282,29 +310,72 @@ function woocommerce_tpayway_gateway() {
             );
         }
 
+        function getResponseCodes($id) {
+            $res = array(
+                0 => 'Akcija uspješna',
+                1 => 'Akcija neuspješna',
+                2 => 'Greška prilikom obrade',
+                3 => 'Akcija otkazana',
+                4 => 'Akcija neuspješna (3D Secure MPI)',
+                1000 => 'Neispravan potpis (pwg_signature)',
+                1001 => 'Neispravan ID dućana (pgw_shop_id)',
+                1002 => 'Neispravan ID transakcija (pgw_transaction_id)',
+                1003 => 'Neispravan iznos (pgw_amount)',
+                1004 => 'Neispravan tip autorizacije (pgw_authorization_type)',
+                1005 => 'Neispravno trajanje najave autorizacije (pgw_announcement_duration)',
+                1006 => 'Neispravan broj rata (pgw_installments)',
+                1007 => 'Neispravan jezik (pgw_language)',
+                1008 => 'Neispravan autorizacijski token (pgw_authorization_token)',
+                1100 => 'Neispravan broj kartice (pgw_card_number)',
+                1101 => 'Neispravan datum isteka kartice (pgw_card_expiration_date)',
+                1102 => 'Neispravan verifikacijski broj kartice (pgw_card_verification_data)',
+                1200 => 'Neispravan ID narudžbe (pgw_order_id)',
+                1201 => 'Neispravan info narudžbe (pgw_order_info)',
+                1202 => 'Neispravne stavke narudžbe (pgw_order_items)',
+                1300 => 'Neispravan način povrata na dućan (pgw_return_method)',
+                1301 => 'Neispravan povratni url na dućan (pgw_success_url)',
+                1302 => 'Neispravan povratni url na dućan (pgw_failure_url)',
+                1304 => 'Neispravni podaci trgovca (pgw_merchant_data)',
+                1400 => 'Neispravno ime kupca (pgw_first_name)',
+                1401 => 'Neispravno prezime kupca (pgw_last_name)',
+                1402 => 'Neispravna adresa (pgw_street)',
+                1403 => 'Neispravni grad (pgw_city)',
+                1404 => 'Neispravni poštanski broj (pgw_post_code)',
+                1405 => 'Neispravna država (pgw_country)',
+                1406 => 'Neispravan kontakt telefon (pgw_telephone)',
+                1407 => 'Neispravna kontakt e-mail adresa (pgw_email)',
+            );
+
+            return $res[$id];
+        }
+
         function check_TPAYWAY_response() {
             global $woocommerce;
 
-            if (isset($_POST['ResponseCode']) && isset($_POST['OrderID']) && isset($_POST['ReasonCode'])) {
-                $order_id = $_POST['OrderID'];
+            if (isset($_POST['pgw_order_id']) && isset($_POST['pgw_trace_ref']) && isset($_POST['pgw_result_code'])) {
+                $order_id = $_POST['pgw_order_id'];
 
                 if ($order_id != '') {
+
                     $order = new WC_Order($order_id);
                     $amount = $_POST['amount'];
-                    $status = $_POST['status'];
-                    if ($this->sucess_responce_code == $_POST['ResponseCode']) {
+                    $status = $_POST['pgw_result_code'];
+
+                    if ($status == 0) {
 
                         global $wpdb;
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                                    'response_code' => $_POST['ResponseCode'],
-                                    'response_code_desc' => '',
-                                    'reason_code' => $_POST['ReasonCode'],
-                                    'status' => ''
-                                ), array('merchant_reference_no' => $_POST["OrderID"]));
+                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
+                            'response_code_desc' => $_POST['pgw_result_code'],
+                            'reason_code' => $_POST['pgw_result_code'],
+                            'status' => $status
+                                ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-                        $order->add_order_note('T-Com PAYWAY payment successful<br/>Unnique Id: ' . $_POST['transaction_id']);
+
+
+                        $order->add_order_note('T-Com PAYWAY payment successful<br/>Unnique Id: ' . $_POST['pgw_order_id']);
                         $order->add_order_note($this->msg['message']);
                         $woocommerce->cart->empty_cart();
 
@@ -312,32 +383,34 @@ function woocommerce_tpayway_gateway() {
 
                         $admin_email = get_option('admin_email', '');
 
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $posted['reason_code']));
+                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
                         $mailer->send($admin_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
 
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $posted['reason_code']));
+                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
                         $mailer->send($order->billing_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
 
                         $order->payment_complete();
 
                         wp_redirect($this->responce_url_sucess, 200);
-                        exit;
                     } else {
                         $order->update_status('failed');
-                        $order->add_order_note('Failed - Code' . $_POST['ReasonCodeDesc']);
+                        $order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
                         $order->add_order_note($this->msg['message']);
 
                         global $wpdb;
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                            'response_code' => $_POST['ResponseCode'],
-                            'response_code_desc' => '',
-                            'reason_code' => $_POST['ReasonCode'],
-                            'status' => ''
-                                ), array('merchant_reference_no' => $_POST["OrderID"]));
+                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
+                            'response_code_desc' => $_POST['pgw_result_code'],
+                            'reason_code' => $_POST['pgw_result_code'],
+                            'status' => $status
+                                ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-                        wp_redirect($this->responce_url_fail, 200);
+                        $text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
+                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_fail.'");</script>';
+                        
+                        echo $text;
                         exit;
                     }
                 }
@@ -366,7 +439,7 @@ function woocommerce_tpayway_gateway() {
 
     }
 
-    if (isset($_POST['ResponseCode']) && isset($_POST['ReasonCode']) && isset($_POST['OrderID'])) {
+    if (isset($_POST['pgw_result_code'])) {
         $WC = new WC_TPAYWAY();
     }
 
