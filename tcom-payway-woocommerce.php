@@ -5,7 +5,7 @@
  * Plugin Name: WooCommerce T-Com PayWay
  * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * Version: 0.8a
+ * Version: 0.8
  * Author: Marin Sagovac (Marin Šagovac)
  * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
  */
@@ -393,17 +393,20 @@ function woocommerce_tpayway_gateway() {
 
                         wp_redirect($this->responce_url_sucess, 200);
                     } else {
-
-                        if ($status == 3) {
-
-                            $order->update_status('cancelled', $this->getResponseCodes($_POST['pgw_result_code']));
-                            $order->add_order_note('Denied - Code' . $_POST['pgw_result_code']);
-                        } else {
-                            $order->update_status('failed', $this->getResponseCodes($_POST['pgw_result_code']));
-                            $order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
-                        }
-
-
+						
+						if ($status == 3) {
+							
+							$order->update_status('cancelled', $this->getResponseCodes($_POST['pgw_result_code']));
+							$order->add_order_note('Denied - Code' . $_POST['pgw_result_code']);
+							
+						}
+						else
+						{
+							$order->update_status('failed', $this->getResponseCodes($_POST['pgw_result_code']));
+							$order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
+						}
+						
+                        
                         $order->add_order_note($this->msg['message']);
 
                         global $wpdb;
@@ -417,10 +420,10 @@ function woocommerce_tpayway_gateway() {
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
                         $text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("' . $this->responce_url_fail . '");</script>';
-
+                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_fail.'");</script>';
+                        
                         echo $text;
-
+                        
                         exit;
                     }
                 }
@@ -518,3 +521,8 @@ function jal_install_data_tpayway() {
 register_activation_hook(__FILE__, 'jal_install_tpayway');
 register_activation_hook(__FILE__, 'jal_install_data_tpayway');
 
+if(is_admin())
+{
+	require_once("admin_payway_wp_list_table.php");
+    new Payway_Wp_List_Table();
+}

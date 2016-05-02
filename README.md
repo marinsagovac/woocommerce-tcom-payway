@@ -17,10 +17,15 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 ## RELEASES
 
 * Latest Release (May 2016): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Release [0.9](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9)
 * Release [0.8a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.8a)
 * Release [0.7](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.7)
 
 ## CHANGELOG
+
+### 0.9
+
+* Added data list table to show PayWay transaction status on administration page [Example](https://github.com/marinsagovac/woocommerce-tcom-payway/blob/master/docs/DataList.jpg)
 
 ### 0.8a
 
@@ -40,10 +45,10 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 * Remove unused code
 * Cleaning up
 
-## Contributing
+## CONTRIBUTING
 
 Thank you for considering contributing and developing features on our repository.
 
-## License
+## LICENSE
 
 A source code is an open-sourced and is under [MIT license](http://opensource.org/licenses/MIT) and is possible to change or improve code.
