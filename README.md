@@ -13,15 +13,23 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 * Added autoform submit function to send customer data.
 * Added T-Com PayWay cards types
 * Example [Form](https://github.com/marinsagovac/woocommerce-tcom-payway/blob/master/docs/primjer_obrasca.png) configuration
+* List table of PayWay transactions on administration page
+* Support for Woo Multi Currency
+* Locale support on PayWay based on language on Wordpress page
 
 ## RELEASES
 
 * Latest Release (May 2016): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Release [0.9a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9a)
 * Release [0.9](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9)
 * Release [0.8a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.8a)
 * Release [0.7](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.7)
 
 ## CHANGELOG
+
+### 0.9a
+
+* Fix 3D Secure with response code 4 as success with pending status
 
 ### 0.9
 

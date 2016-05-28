@@ -4,7 +4,7 @@ Donate link:
 Tags: WooCommerce, Payment Gateway, Payway, T-Com Payway, Croatia
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 0.9
+Stable tag: 0.9a
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
