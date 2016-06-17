@@ -1,11 +1,11 @@
 <?php
 
 /*
- * Date: May 2016
+ * Date: June 2016
  * Plugin Name: WooCommerce T-Com PayWay
  * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * Version: 0.9a
+ * Version: 0.9b
  * Author: Marin Sagovac (Marin Šagovac)
  * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
  */
@@ -26,7 +26,7 @@ function woocommerce_tpayway_gateway() {
         public function __construct() {
 
             $plugin_dir = plugin_dir_url(__FILE__);
-            $this->id = 'TPAYWAY';
+            $this->id = 'WC_TPAYWAY';
             $this->icon = apply_filters('woocommerce_Paysecure_icon', '' . $plugin_dir . 'payway.png');
             $this->method_title = 'T-Com PayWay';
             $this->has_fields = false;
@@ -36,10 +36,8 @@ function woocommerce_tpayway_gateway() {
 
             $this->title = $this->settings['title'];
             $this->description = $this->settings['description'];
-            $this->CurrencyEn = $this->settings['CurrencyEn'];
             $this->ShopID = $this->settings['MerID'];
             $this->AcqID = $this->settings['AcqID'];
-            $this->ResponseCode = $this->settings['ResponseCode'];
             $this->pg_domain = $this->settings['pg_domain'];
             $this->responce_url_sucess = $this->settings['responce_url_sucess'];
             $this->responce_url_fail = $this->settings['responce_url_fail'];
@@ -60,6 +58,8 @@ function woocommerce_tpayway_gateway() {
         }
 
         function init_form_fields() {
+
+	    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
             if (is_plugin_active('woo-multi-currency/woo-multi-currency.php')) {
                 $woo_active = array(
