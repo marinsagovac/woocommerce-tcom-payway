@@ -7,7 +7,7 @@
  * Description: T-Com PayWay payment gateway
  * Version: 0.9b
  * Author: Marin Sagovac (Marin Šagovac)
- * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević)
+ * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić)
  */
 
 if (!defined('ABSPATH'))
