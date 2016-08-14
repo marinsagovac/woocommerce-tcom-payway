@@ -311,6 +311,8 @@ function woocommerce_tpayway_gateway() {
         }
 
         function getResponseCodes($id) {
+            $id = (int) $id;
+
             $res = array(
                 0 => 'Akcija uspješna',
                 1 => 'Akcija neuspješna',
@@ -367,9 +369,9 @@ function woocommerce_tpayway_gateway() {
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
-                            'response_code_desc' => $_POST['pgw_result_code'],
-                            'reason_code' => $_POST['pgw_result_code'],
+                            'response_code' => $status,
+                            'response_code_desc' => $this->getResponseCodes($status),
+                            'reason_code' => $status,
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
@@ -450,9 +452,9 @@ function woocommerce_tpayway_gateway() {
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
-                            'response_code_desc' => $_POST['pgw_result_code'],
-                            'reason_code' => $_POST['pgw_result_code'],
+                            'response_code' => $status,
+                            'response_code_desc' => $this->getResponseCodes($status),
+                            'reason_code' => $status,
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
@@ -520,8 +522,8 @@ function jal_install_tpayway() {
     $sql = "CREATE TABLE $table_name (
         id int(9) NOT NULL AUTO_INCREMENT,
         transaction_id int(9) NOT NULL,
-        response_code VARCHAR(20) NOT NULL,
-        response_code_desc int(6) NOT NULL,
+        response_code int(6) NOT NULL,
+        response_code_desc VARCHAR(20) NOT NULL,
         reason_code VARCHAR(20) NOT NULL,
         amount VARCHAR(20) NOT NULL,
         or_date DATE NOT NULL,
