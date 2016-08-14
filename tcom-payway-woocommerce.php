@@ -352,14 +352,14 @@ function woocommerce_tpayway_gateway() {
         function check_TPAYWAY_response() {
             global $woocommerce;
 
-            if (isset($_POST['pgw_order_id']) && isset($_POST['pgw_trace_ref']) && isset($_POST['pgw_result_code'])) {
+            if (isset($_POST['pgw_order_id']) && isset($_POST['pgw_trace_ref'])) {
                 $order_id = $_POST['pgw_order_id'];
 
                 if ($order_id != '') {
 
                     $order = new WC_Order($order_id);
                     $amount = $_POST['amount'];
-                    $status = $_POST['pgw_result_code'];
+                    $status = isset($_POST['pgw_result_code']) ? (int) $_POST['pgw_result_code'] : 0;
 
                     if ($status == 0) {
 
@@ -489,9 +489,7 @@ function woocommerce_tpayway_gateway() {
 
     }
 
-    if (isset($_POST['pgw_result_code'])) {
-        $WC = new WC_TPAYWAY();
-    }
+    $WC = new WC_TPAYWAY();
 
     function woocommerce_add_tpayway_gateway($methods) {
         $methods[] = 'WC_TPAYWAY';
