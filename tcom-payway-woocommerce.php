@@ -375,10 +375,7 @@ function woocommerce_tpayway_gateway() {
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-
-
                         $order->add_order_note('T-Com PAYWAY payment successful<br/>Unnique Id: ' . $_POST['pgw_order_id']);
-                        $order->add_order_note($this->msg['message']);
                         $woocommerce->cart->empty_cart();
 
                         $mailer = $woocommerce->mailer();
@@ -444,9 +441,6 @@ function woocommerce_tpayway_gateway() {
 							$order->update_status('failed', $this->getResponseCodes($_POST['pgw_result_code']));
 							$order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
 						}
-						
-                        
-                        $order->add_order_note($this->msg['message']);
 
                         global $wpdb;
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
