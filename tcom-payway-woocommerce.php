@@ -311,6 +311,8 @@ function woocommerce_tpayway_gateway() {
         }
 
         function getResponseCodes($id) {
+            $id = (int) $id;
+
             $res = array(
                 0 => 'Akcija uspješna',
                 1 => 'Akcija neuspješna',
@@ -352,14 +354,14 @@ function woocommerce_tpayway_gateway() {
         function check_TPAYWAY_response() {
             global $woocommerce;
 
-            if (isset($_POST['pgw_order_id']) && isset($_POST['pgw_trace_ref']) && isset($_POST['pgw_result_code'])) {
+            if (isset($_POST['pgw_order_id']) && isset($_POST['pgw_trace_ref'])) {
                 $order_id = $_POST['pgw_order_id'];
 
                 if ($order_id != '') {
 
                     $order = new WC_Order($order_id);
                     $amount = $_POST['amount'];
-                    $status = $_POST['pgw_result_code'];
+                    $status = isset($_POST['pgw_result_code']) ? (int) $_POST['pgw_result_code'] : 0;
 
                     if ($status == 0) {
 
@@ -367,100 +369,67 @@ function woocommerce_tpayway_gateway() {
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
-                            'response_code_desc' => $_POST['pgw_result_code'],
-                            'reason_code' => $_POST['pgw_result_code'],
+                            'response_code' => $status,
+                            'response_code_desc' => $this->getResponseCodes($status),
+                            'reason_code' => $status,
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-
-
                         $order->add_order_note('T-Com PAYWAY payment successful<br/>Unnique Id: ' . $_POST['pgw_order_id']);
-                        $order->add_order_note($this->msg['message']);
                         $woocommerce->cart->empty_cart();
+
+                        // Mark as on-hold (we're awaiting the payment)
+                        $order->update_status('pending', __('Awaiting payment', 'ognro'));
 
                         $mailer = $woocommerce->mailer();
 
                         $admin_email = get_option('admin_email', '');
 
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-                        $mailer->send($admin_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
-
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-                        $mailer->send($order->billing_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
+                        $message = $mailer->wrap_message(__('Naplata uspješna', 'woocommerce'),
+                            sprintf(__('Naplata preko HT PayWay-a je uspješno obavljena te je narudžba označena kao obrađena', 'woocommerce'),
+                            $order->get_order_number()));
+                        $mailer->send($admin_email, sprintf(__('Naplata za narudžbu broj %s uspješna',
+                            'woocommerce'), $order->get_order_number()), $message);
 
                         $order->payment_complete();
 
                         wp_redirect($this->responce_url_sucess, 200);
                     } else {
-						
+
 						if ($status == 3) {
-							
-							$order->update_status('cancelled', $this->getResponseCodes($_POST['pgw_result_code']));
-							$order->add_order_note('Denied - Code' . $_POST['pgw_result_code']);
-							
-						} else if ($status == 4) {
-							$order->update_status('pending', $this->getResponseCodes($_POST['pgw_result_code']));
-							$order->add_order_note('Pending and processed - Code' . $_POST['pgw_result_code']);
-							
-							global $wpdb;
-							$table_name = $wpdb->prefix . 'tpayway_ipg';
-							$wpdb->update(
-									$table_name, array(
-										'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
-										'response_code_desc' => $_POST['pgw_result_code'],
-										'reason_code' => $_POST['pgw_result_code'],
-										'status' => $status
-									), array('transaction_id' => $_POST["pgw_order_id"]));
-									
-							$order->add_order_note($this->msg['message']);
-							$woocommerce->cart->empty_cart();
 
-							$mailer = $woocommerce->mailer();
+							$order->update_status('cancelled');
+							$order->add_order_note($this->getResponseCodes($status) ." (Code $status)");
 
-							$admin_email = get_option('admin_email', '');
+                            $cartUrl = $woocommerce->cart->get_cart_url();
 
-							$message = $mailer->wrap_message(__('Order confirmed and pending 3D Secure VISA', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to 3D Secure - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-							$mailer->send($admin_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
+                            wp_redirect($cartUrl, 200);
 
-							$message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-							$mailer->send($order->billing_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
-
-							$order->payment_complete();
-							
-							$text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-							$text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_sucess.'");</script>';
-							
-							echo $text;
-							
-							exit;
-
-						}
-
+                        }
 						else
 						{
-							$order->update_status('failed', $this->getResponseCodes($_POST['pgw_result_code']));
-							$order->add_order_note('Failed - Code' . $_POST['pgw_result_code']);
-						}
-						
-                        
-                        $order->add_order_note($this->msg['message']);
+							$order->update_status('failed');
+                            $order->add_order_note($this->getResponseCodes($status) ." (Code $status)");
+                            $woocommerce->cart->empty_cart();
+
+                        }
 
                         global $wpdb;
                         $table_name = $wpdb->prefix . 'tpayway_ipg';
                         $wpdb->update(
                                 $table_name, array(
-                            'response_code' => $this->getResponseCodes($_POST['pgw_result_code']),
-                            'response_code_desc' => $_POST['pgw_result_code'],
-                            'reason_code' => $_POST['pgw_result_code'],
+                            'response_code' => $status,
+                            'response_code_desc' => $this->getResponseCodes($status),
+                            'reason_code' => $status,
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-                        $text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_fail.'");</script>';
-                        
+                        $text = '<html><meta charset="utf-8"><body><center style="font-family:Verdana">A payment was not successfull or declined. <br
+                        />Reason: ' . $this->getResponseCodes($status) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
+                        $text .='<br />Preusmjeravanje...</center><script>setTimeout(function(){ window.location.replace("'.$this->responce_url_fail.'"); },3000);</script></body></html>';
+
                         echo $text;
-                        
+
                         exit;
                     }
                 }
@@ -489,9 +458,7 @@ function woocommerce_tpayway_gateway() {
 
     }
 
-    if (isset($_POST['pgw_result_code'])) {
-        $WC = new WC_TPAYWAY();
-    }
+    $WC = new WC_TPAYWAY();
 
     function woocommerce_add_tpayway_gateway($methods) {
         $methods[] = 'WC_TPAYWAY';
@@ -522,8 +489,8 @@ function jal_install_tpayway() {
     $sql = "CREATE TABLE $table_name (
         id int(9) NOT NULL AUTO_INCREMENT,
         transaction_id int(9) NOT NULL,
-        response_code VARCHAR(20) NOT NULL,
-        response_code_desc int(6) NOT NULL,
+        response_code int(6) NOT NULL,
+        response_code_desc VARCHAR(20) NOT NULL,
         reason_code VARCHAR(20) NOT NULL,
         amount VARCHAR(20) NOT NULL,
         or_date DATE NOT NULL,
