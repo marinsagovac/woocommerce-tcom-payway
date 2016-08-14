@@ -378,6 +378,9 @@ function woocommerce_tpayway_gateway() {
                         $order->add_order_note('T-Com PAYWAY payment successful<br/>Unnique Id: ' . $_POST['pgw_order_id']);
                         $woocommerce->cart->empty_cart();
 
+                        // Mark as on-hold (we're awaiting the payment)
+                        $order->update_status('pending', __('Awaiting payment', 'ognro'));
+
                         $mailer = $woocommerce->mailer();
 
                         $admin_email = get_option('admin_email', '');
