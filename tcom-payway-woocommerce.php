@@ -452,11 +452,12 @@ function woocommerce_tpayway_gateway() {
                             'status' => $status
                                 ), array('transaction_id' => $_POST["pgw_order_id"]));
 
-                        $text = '<center style="font-family:Verdana">A payment was not successfull or declined. <br />Reason: ' . $this->getResponseCodes($_POST['pgw_result_code']) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-                        $text .='<br />Preusmjeravanje...</center><script>window.location.replace("'.$this->responce_url_fail.'");</script>';
-                        
+                        $text = '<html><meta charset="utf-8"><body><center style="font-family:Verdana">A payment was not successfull or declined. <br
+                        />Reason: ' . $this->getResponseCodes($status) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
+                        $text .='<br />Preusmjeravanje...</center><script>setTimeout(function(){ window.location.replace("'.$this->responce_url_fail.'"); },3000);</script></body></html>';
+
                         echo $text;
-                        
+
                         exit;
                     }
                 }
