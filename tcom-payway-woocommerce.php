@@ -385,18 +385,17 @@ function woocommerce_tpayway_gateway() {
 
                         $admin_email = get_option('admin_email', '');
 
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-                        $mailer->send($admin_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
-
-                        $message = $mailer->wrap_message(__('Order confirmed', 'woocommerce'), sprintf(__('Order %s has been marked on-hold due to a reversal - Reason code: %s', 'woocommerce'), $order->get_order_number(), $this->getResponseCodes($_POST['pgw_result_code'])));
-                        $mailer->send($order->billing_email, sprintf(__('Payment for order %s confirmed', 'woocommerce'), $order->get_order_number()), $message);
+                        $message = $mailer->wrap_message(__('Naplata uspješna', 'woocommerce'),
+                            sprintf(__('Naplata preko HT PayWay-a je uspješno obavljena te je narudžba označena kao obrađena', 'woocommerce'),
+                            $order->get_order_number()));
+                        $mailer->send($admin_email, sprintf(__('Naplata za narudžbu broj %s uspješna',
+                            'woocommerce'), $order->get_order_number()), $message);
 
                         $order->payment_complete();
 
                         wp_redirect($this->responce_url_sucess, 200);
                     } else {
 
-						
 						if ($status == 3) {
 
 							$order->update_status('cancelled');
