@@ -20,13 +20,22 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 ## RELEASES
 
 * Latest Release (June 2016): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Release [1.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.0)
 * Release [0.9b](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9b)
 * Release [0.9a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9a)
 * Release [0.9](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9)
-* Release [0.8a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.8a)
-* Release [0.7](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.7)
 
 ## CHANGELOG
+
+### 1.0
+
+* Fix pgw result code
+* Fix response code, parsing $id variable
+* Clean unneeded codes
+* Timeout 3 seconds so that user can read notice on redirecting page
+* Pending status after successful payment
+* Order note with code status when is status code 3, returning to cart and empty cart (cancelled status)
+* User already receive email notifications for successful transactions, translated to Croatian
 
 ### 0.9b
 
@@ -61,6 +70,7 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 ## CONTRIBUTING
 
 Thank you for considering contributing and developing features on our repository.
+We're continuing to improving, upgrading and fixing our repository using open source directive so specially thanks to contributors.
 
 ## LICENSE
 
