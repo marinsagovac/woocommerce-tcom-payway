@@ -54,7 +54,7 @@ function woocommerce_tpayway_gateway() {
             } else {
                 add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
             }
-            add_action('woocommerce_receipt_TPAYWAY', array(&$this, 'receipt_page'));
+            add_action('woocommerce_receipt_WC_TPAYWAY', array(&$this, 'receipt_page'));
         }
 
         function init_form_fields() {
