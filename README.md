@@ -19,13 +19,19 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 ## RELEASES
 
-* Latest Release (June 2016): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Latest Release (December 2017): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
 * Release [1.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.0)
 * Release [0.9b](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9b)
 * Release [0.9a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9a)
 * Release [0.9](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9)
 
 ## CHANGELOG
+
+### 1.1
+
+* Fix receipment class
+* Added wiki documenatation
 
 ### 1.0
 
