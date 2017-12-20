@@ -67,6 +67,10 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 * Remove unused code
 * Cleaning up
 
+## HELP
+
+Click here to go to [WIKI Help page](https://github.com/marinsagovac/woocommerce-tcom-payway/wiki/Common-issues-and-helps) for more common mistakes and helps.
+
 ## CONTRIBUTING
 
 Thank you for considering contributing and developing features on our repository.
