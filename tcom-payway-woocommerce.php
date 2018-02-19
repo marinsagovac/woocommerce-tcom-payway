@@ -205,17 +205,32 @@ function woocommerce_tpayway_gateway() {
                 $order->order_total = $order->order_total;
             }
 
-            if ($this->woo_active === "yes") {
-                if (isset($_COOKIE['wmc_current_currency'])) {
+            $curr_symbole = get_woocommerce_currency();
+            $hrk_rate = apply_filters( 'jal_pw_currency_rate', false ); // filter can be used to input Currency rate for other currencies to HRK            
+            $convert = $curr_symbole !== 'HRK';
 
-                    $curr_symbole = get_woocommerce_currency();
-                    $selected_c = get_option('wmc_selected_currencies');
+            if( $convert && $hrk_rate === false ){
+                $wcml_settings = get_option('_wcml_settings'); // WooCommerce Multilingual - Multi Currency (WPML plugin)
 
-                    if ($_COOKIE['wmc_current_currency'] !== 'HRK') {
-                        $order->order_total = $woocommerce->cart->total * (1 / $selected_c[$_COOKIE['wmc_current_currency']]["rate"]);
-                    }
+                if($wcml_settings){                    
+                    $curr_rates = $wcml_settings['currency_options'];
+
+                    $hrk_rate = $curr_rates[$curr_symbole]["rate"];                    
                 }
-            }
+                else if ($this->woo_active === "yes") { 
+                    if (isset($_COOKIE['wmc_current_currency'])) { // WooCommerce Multi Currency plugin                       
+                        $selected_c = get_option('wmc_selected_currencies');
+
+                        if ($_COOKIE['wmc_current_currency'] !== 'HRK') {
+                            $hrk_rate = $selected_c[$_COOKIE['wmc_current_currency']]["rate"];
+                        }
+                    }
+                }            
+            }            
+
+            if( $convert && is_numeric( $hrk_rate ) ) {
+                $order->order_total = $woocommerce->cart->total * (1 / $hrk_rate);
+            }                
 
             $order_format_value = str_pad(($order->order_total * 100), 12, '0', STR_PAD_LEFT);
             $totalAmount = number_format($order->order_total, 2, '', '');
