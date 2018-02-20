@@ -1,13 +1,13 @@
 <?php
 
 /*
- * Date: August 2016
+ * Date: January 2018
  * Plugin Name: WooCommerce T-Com PayWay
  * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * Version: 1.0
+ * Version: 1.2
  * Author: Marin Sagovac (Marin Šagovac)
- * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić)
+ * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić), Ivan Švaljek
  */
 
 if (!defined('ABSPATH'))

@@ -14,19 +14,28 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 * Added T-Com PayWay cards types
 * Example [Form](https://github.com/marinsagovac/woocommerce-tcom-payway/blob/master/docs/primjer_obrasca.png) configuration
 * List table of PayWay transactions on administration page
-* Support for Woo Multi Currency
 * Locale support on PayWay based on language on Wordpress page
+* WPML and Woo Multi Currency support currency rate
 
 ## RELEASES
 
-* Latest Release (December 2017): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Latest Release (January 2018): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
 * Release [1.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.0)
 * Release [0.9b](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9b)
 * Release [0.9a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9a)
-* Release [0.9](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9)
+
+## INSTALLATION
+
+Download ZIP archive, upload via plugin page and apply package. Activate plugin. Change settings under Woocomerce settings page on the checkout page.
 
 ## CHANGELOG
+
+### 1.2
+
+* Added WPML support to supply the currency rate
+* Keep support for Woo Multi Currency
 
 ### 1.1
 
