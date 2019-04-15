@@ -5,7 +5,7 @@ T-Com PayWay is payment gateway service for Croatia only.
 
 ## Donations
 
-Due I am working 100% alone without any helps, organizations and any others team I can be satisfy for receiving any amount of payment to improve, develop and continue building on origin idea of framework.
+A donations are possible to receive on PayPal. All contributors will receive on same amount that is available after payment.
 
 A contrbutors that are pushed to project will be also received regulary payments. All contributors will be received payments on same amount of total received donations.
 
