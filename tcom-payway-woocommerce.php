@@ -1,18 +1,19 @@
 <?php
-
 /*
  * Date: January 2018
  * Plugin Name: WooCommerce T-Com PayWay
  * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * Version: 1.2
+ * version: 1.3
  * Author: Marin Sagovac (Marin Šagovac)
- * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić), Ivan Švaljek
+ * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić), Ivan Švaljek, Alen Širola (Micemade)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
+
+load_plugin_textdomain( 'tcom-payway-wc', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 
 add_action( 'plugins_loaded', 'woocommerce_tpayway_gateway', 0 );
 
@@ -28,7 +29,7 @@ function woocommerce_tpayway_gateway() {
 
 			$plugin_dir         = plugin_dir_url( __FILE__ );
 			$this->id           = 'WC_TPAYWAY';
-			$this->icon         = apply_filters( 'woocommerce_Paysecure_icon', '' . $plugin_dir . 'payway.png' );
+			$this->icon         = apply_filters( 'woocommerce_payway_icon', '' . $plugin_dir . 'payway.png' );
 			$this->method_title = 'T-Com PayWay';
 			$this->has_fields   = false;
 
@@ -37,20 +38,20 @@ function woocommerce_tpayway_gateway() {
 
 			$this->title               = $this->settings['title'];
 			$this->description         = $this->settings['description'];
-			$this->ShopID              = $this->settings['MerID'];
-			$this->AcqID               = $this->settings['AcqID'];
+			$this->shop_id             = $this->settings['mer_id'];
+			$this->acq_id              = $this->settings['acq_id'];
 			$this->pg_domain           = $this->settings['pg_domain'];
-			$this->responce_url_sucess = $this->settings['responce_url_sucess'];
-			$this->responce_url_fail   = $this->settings['responce_url_fail'];
+			$this->response_url_sucess = $this->settings['response_url_sucess'];
+			$this->response_url_fail   = $this->settings['response_url_fail'];
 			$this->checkout_msg        = $this->settings['checkout_msg'];
 			$this->woo_active          = $this->settings['woo_active'];
 
 			$this->msg['message'] = '';
 			$this->msg['class']   = '';
 
-			add_action( 'init', array( &$this, 'check_TPAYWAY_response' ) );
+			add_action( 'init', array( &$this, 'check_tcompayway_respose' ) );
 
-			if ( version_compare( WOOCOMMERCE_VERSION, '2.0.0', '>=' ) ) {
+			if ( version_compare( WOOCOMMERCE_version, '2.0.0', '>=' ) ) {
 				add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( &$this, 'process_admin_options' ) );
 			} else {
 				add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
@@ -64,83 +65,83 @@ function woocommerce_tpayway_gateway() {
 
 			if ( is_plugin_active( 'woo-multi-currency/woo-multi-currency.php' ) ) {
 				$woo_active = array(
-					'title'   => __( 'Use Woo Multi Currency conversion', 'ogn' ),
+					'title'   => __( 'Use Woo Multi Currency conversion', 'tcom-payway-wc' ),
 					'type'    => 'checkbox',
-					'label'   => __( 'Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'ognro' ),
+					'label'   => __( 'Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'tcom-payway-wc' ),
 					'default' => 'no',
 				);
 			} else {
 				$woo_active = array(
-					'title'    => __( 'Use Woo Multi Currency conversion', 'ogn' ),
+					'title'    => __( 'Use Woo Multi Currency conversion', 'tcom-payway-wc' ),
 					'type'     => 'checkbox',
 					'disabled' => true,
-					'label'    => __( 'Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'ognro' ),
+					'label'    => __( 'Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'tcom-payway-wc' ),
 					'default'  => 'no',
 				);
 			};
 
 			$this->form_fields = array(
 				'enabled'             => array(
-					'title'   => __( 'Enable/Disable', 'ogn' ),
+					'title'   => __( 'Enable/Disable', 'tcom-payway-wc' ),
 					'type'    => 'checkbox',
-					'label'   => __( 'Enable T-Com PayWay Module.', 'ognro' ),
+					'label'   => __( 'Enable T-Com PayWay Module.', 'tcom-payway-wc' ),
 					'default' => 'no',
 				),
 				'title'               => array(
-					'title'       => __( 'Title:', 'ognro' ),
+					'title'       => __( 'Title:', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( 'This controls the title which the user sees during checkout.', 'ognro' ),
-					'default'     => __( 'T-Com PayWay', 'ognro' ),
+					'description' => __( 'This controls the title which the user sees during checkout.', 'tcom-payway-wc' ),
+					'default'     => __( 'T-Com PayWay', 'tcom-payway-wc' ),
 				),
 				'description'         => array(
-					'title'       => __( 'Description:', 'ognro' ),
+					'title'       => __( 'Description:', 'tcom-payway-wc' ),
 					'type'        => 'textarea',
-					'description' => __( 'This controls the description which the user sees during checkout.', 'ognro' ),
-					'default'     => __( 'T-Com Payway is secure payment gateway in Croatia and you can pay using this payment in other currency.', 'ognro' ),
+					'description' => __( 'This controls the description which the user sees during checkout.', 'tcom-payway-wc' ),
+					'default'     => __( 'T-Com Payway is secure payment gateway in Croatia and you can pay using this payment in other currency.', 'tcom-payway-wc' ),
 				),
 				'pg_domain'           => array(
-					'title'       => __( 'Authorize URL:', 'ognro' ),
+					'title'       => __( 'Authorize URL:', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( 'T-Com PayWay data submiting to this URL', 'ognro' ),
-					'default'     => __( 'https://pgw.ht.hr/services/payment/api/authorize-form', 'ognro' ),
+					'description' => __( 'T-Com PayWay data submiting to this URL', 'tcom-payway-wc' ),
+					'default'     => __( 'https://pgw.ht.hr/services/payment/api/authorize-form', 'tcom-payway-wc' ),
 				),
-				'MerID'               => array(
-					'title'       => __( 'Shop ID:', 'ognro' ),
+				'mer_id'               => array(
+					'title'       => __( 'Shop ID:', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( 'Unique id for the merchant acc, given by bank.', 'ognro' ),
-					'default'     => __( '', 'ognro' ),
+					'description' => __( 'Unique id for the merchant acc, given by bank.', 'tcom-payway-wc' ),
+					'default'     => '',
 				),
-				'AcqID'               => array(
-					'title'       => __( 'Secret Key:', 'ognro' ),
+				'acq_id'              => array(
+					'title'       => __( 'Secret Key:', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( '', 'ognro' ),
-					'default'     => __( '', 'ognro' ),
+					'description' => '',
+					'default'     => '',
 				),
-				'responce_url_sucess' => array(
-					'title'       => __( 'Response URL success', 'ognro' ),
+				'mer_id' => array(
+					'title'       => __( 'Response URL success', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( '', 'ognro' ),
-					'default'     => __( '', 'ognro' ),
+					'description' => '',
+					'default'     => '',
 				),
-				'responce_url_fail'   => array(
-					'title'       => __( 'Response URL fail:', 'ognro' ),
+				'response_url_fail'   => array(
+					'title'       => __( 'Response URL fail:', 'tcom-payway-wc' ),
 					'type'        => 'text',
-					'description' => __( '', 'ognro' ),
-					'default'     => __( '', 'ognro' ),
+					'description' => '',
+					'default'     => '',
 				),
 				'checkout_msg'        => array(
-					'title'       => __( 'Message redirect:', 'ognro' ),
+					'title'       => __( 'Message redirect:', 'tcom-payway-wc' ),
 					'type'        => 'textarea',
-					'description' => __( 'Message to client when redirecting to PayWay page', 'ognro' ),
-					'default'     => __( '', 'ognro' ),
+					'description' => __( 'Message to client when redirecting to PayWay page', 'tcom-payway-wc' ),
+					'default'     => '',
 				),
 				'woo_active'          => $woo_active,
 			);
 		}
 
 		public function admin_options() {
-			echo '<h3>' . __( 'T-Com PayWay payment gateway', 'ognro' ) . '</h3>';
-			echo '<p>' . __( '<a target="_blank" href="http://pgw.t-com.hr/">T-Com PayWay</a> is payment gateway from telecom T-Com who provides payment gateway services as dedicated services to clients in Croatia.' ) . '</p>';
+			echo '<h3>' . __( 'T-Com PayWay payment gateway', 'tcom-payway-wc' ) . '</h3>';
+			echo '<p>' . __( '<a target="_blank" href="http://pgw.t-com.hr/">T-Com PayWay</a> is payment gateway from telecom T-Com who provides payment gateway services as dedicated services to clients in Croatia.', 'tcom-payway-wc' ) . '</p>';
 			echo '<table class="form-table">';
 			$this->generate_settings_html();
 			echo '</table>';
@@ -225,8 +226,8 @@ function woocommerce_tpayway_gateway() {
 			}
 
 			$order->order_total = $order->order_total;
-			if ( $woocommerce->customer->country == 'HR' ) {
-				if ( $order->get_order_currency() == 'HRK' ) {
+			if ( 'HR' === $woocommerce->customer->country ) {
+				if ( 'HRK' === $order->get_order_currency() ) {
 					$order->order_total = $order->order_total;
 				}
 			} else {
@@ -235,20 +236,20 @@ function woocommerce_tpayway_gateway() {
 
 			$curr_symbole = get_woocommerce_currency();
 			$hrk_rate     = apply_filters( 'jal_pw_currency_rate', false ); // filter can be used to input Currency rate for other currencies to HRK
-			$convert      = $curr_symbole !== 'HRK';
+			$convert      = 'HRK' !== $curr_symbole;
 
-			if ( $convert && $hrk_rate === false ) {
+			if ( false === $convert && $hrk_rate ) {
 				$wcml_settings = get_option( '_wcml_settings' ); // WooCommerce Multilingual - Multi Currency (WPML plugin)
 
 				if ( $wcml_settings ) {
 					$curr_rates = $wcml_settings['currency_options'];
 
 					$hrk_rate = $curr_rates[ $curr_symbole ]['rate'];
-				} elseif ( $this->woo_active === 'yes' ) {
+				} elseif ( 'yes' === $this->woo_active ) {
 					if ( isset( $_COOKIE['wmc_current_currency'] ) ) { // WooCommerce Multi Currency plugin
 						$selected_c = get_option( 'wmc_selected_currencies' );
 
-						if ( $_COOKIE['wmc_current_currency'] !== 'HRK' ) {
+						if ( 'HRK' !== $_COOKIE['wmc_current_currency'] ) {
 							$hrk_rate = $selected_c[ $_COOKIE['wmc_current_currency'] ]['rate'];
 						}
 					}
@@ -260,20 +261,20 @@ function woocommerce_tpayway_gateway() {
 			}
 
 			$order_format_value = str_pad( ( $order->order_total * 100 ), 12, '0', STR_PAD_LEFT );
-			$totalAmount        = number_format( $order->order_total, 2, '', '' );
+			$total_amount       = number_format( $order->order_total, 2, '', '' );
 
 			$method                 = 'authorize-form'; // method type
-			$pgwInstallments        = '1'; // broj rata
+			$pwg_installments       = '1'; // broj rata
 			$pgw_card_type_id       = '1'; // tip kartice
-			$secret_key             = $this->AcqID; // Secret key
+			$secret_key             = $this->acq_id; // Secret key
 			$pgw_authorization_type = '0';
 
-			$pgw_shop_id  = $this->ShopID;
+			$pgw_shop_id  = $this->shop_id;
 			$pgw_order_id = $order_id;
-			$pgw_amount   = $totalAmount;
+			$pgw_amount   = $total_amount;
 
-			$pgw_success_url = $this->responce_url_sucess;
-			$pgw_failure_url = $this->responce_url_fail;
+			$pgw_success_url = $this->mer_id;
+			$pgw_failure_url = $this->response_url_fail;
 
 			$order          = new WC_Order( $order_id );
 			$pgw_first_name = $order->billing_first_name;
@@ -306,13 +307,13 @@ function woocommerce_tpayway_gateway() {
 			);
 
 			$form_args = array(
-				'Version'                => $this->Version,
+				'version'                => $this->version,
 				'pgw_shop_id'            => $pgw_shop_id,
 				'pgw_order_id'           => $pgw_order_id,
 				'pgw_amount'             => $pgw_amount,
 				'pgw_authorization_type' => $pgw_authorization_type,
-				'pgw_success_url'        => $this->responce_url_sucess,
-				'pgw_failure_url'        => $this->responce_url_fail,
+				'pgw_success_url'        => $this->mer_id,
+				'pgw_failure_url'        => $this->response_url_fail,
 				'pgw_language'           => $pgw_language,
 				'pgw_signature'          => $pgw_signature,
 				'pgw_first_name'         => $pgw_first_name,
@@ -323,7 +324,7 @@ function woocommerce_tpayway_gateway() {
 				'pgw_country'            => $pgw_country,
 				'pgw_telephone'          => $pgw_telephone,
 				'pgw_email'              => $pgw_email,
-				'AcqID'                  => $this > AcqID, // secret key
+				'acq_id'                 => $this > acq_id, // secret key
 				'PurchaseAmt'            => $order_format_value,
 			);
 
@@ -338,8 +339,8 @@ function woocommerce_tpayway_gateway() {
 		<p>Total amount will be <b>' . number_format( ( $order->order_total ) ) . ' ' . $curr_symbole . '</b></p>
 		<form action="' . $this->pg_domain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
             ' . implode( '', $form_args_array ) . '
-            <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __( 'Pay via PayWay', 'ognro' ) . '" />
-                <a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __( 'Cancel order &amp; restore cart', 'ognro' ) . '</a>
+            <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __( 'Pay via PayWay', 'tcom-payway-wc' ) . '" />
+                <a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __( 'Cancel order &amp; restore cart', 'tcom-payway-wc' ) . '</a>
             </form>
             <!-- autoform submit -->
             <script type="text/javascript">
@@ -356,7 +357,7 @@ function woocommerce_tpayway_gateway() {
 			);
 		}
 
-		function getResponseCodes( $id ) {
+		function get_response_codes( $id ) {
 			$id = (int) $id;
 
 			$res = array(
@@ -397,19 +398,19 @@ function woocommerce_tpayway_gateway() {
 			return $res[ $id ];
 		}
 
-		function check_TPAYWAY_response() {
+		function check_tcompayway_respose() {
 			global $woocommerce;
 
 			if ( isset( $_POST['pgw_order_id'] ) && isset( $_POST['pgw_trace_ref'] ) ) {
 				$order_id = $_POST['pgw_order_id'];
 
-				if ( $order_id != '' ) {
+				if ( '' !== $order_id ) {
 
 					$order  = new WC_Order( $order_id );
 					$amount = $_POST['amount'];
 					$status = isset( $_POST['pgw_result_code'] ) ? (int) $_POST['pgw_result_code'] : 0;
 
-					if ( $status == 0 ) {
+					if ( 0 === $status ) {
 
 						global $wpdb;
 						$table_name = $wpdb->prefix . 'tpayway_ipg';
@@ -417,7 +418,7 @@ function woocommerce_tpayway_gateway() {
 							$table_name,
 							array(
 								'response_code'      => $status,
-								'response_code_desc' => $this->getResponseCodes( $status ),
+								'response_code_desc' => $this->get_response_codes( $status ),
 								'reason_code'        => $status,
 								'status'             => $status,
 							),
@@ -428,26 +429,23 @@ function woocommerce_tpayway_gateway() {
 						$woocommerce->cart->empty_cart();
 
 						// Mark as on-hold (we're awaiting the payment)
-						$order->update_status( 'pending', __( 'Awaiting payment', 'ognro' ) );
+						$order->update_status( 'pending', __( 'Awaiting payment', 'tcom-payway-wc' ) );
 
 						$mailer = $woocommerce->mailer();
 
 						$admin_email = get_option( 'admin_email', '' );
 
 						$message = $mailer->wrap_message(
-							__( 'Naplata uspješna', 'woocommerce' ),
+							__( 'Payment successful', 'tcom-payway-wc' ),
 							sprintf(
-								__( 'Naplata preko HT PayWay-a je uspješno obavljena te je narudžba označena kao obrađena', 'woocommerce' ),
+								__( 'Payment on T-Com PayWay is successfully completeted and order status is processed.', 'tcom-payway-wc' ),
 								$order->get_order_number()
 							)
 						);
 						$mailer->send(
 							$admin_email,
 							sprintf(
-								__(
-									'Naplata za narudžbu broj %s uspješna',
-									'woocommerce'
-								),
+								__( 'Payment for order no. %s was sucessful.', 'tcom-payway-wc' ),
 								$order->get_order_number()
 							),
 							$message
@@ -455,21 +453,21 @@ function woocommerce_tpayway_gateway() {
 
 						$order->payment_complete();
 
-						wp_redirect( $this->responce_url_sucess, 200 );
+						wp_redirect( $this->mer_id, 200 );
 					} else {
 
-						if ( $status == 3 ) {
+						if ( 3 === $status ) {
 
 							$order->update_status( 'cancelled' );
-							$order->add_order_note( $this->getResponseCodes( $status ) . " (Code $status)" );
+							$order->add_order_note( $this->get_response_codes( $status ) . " (Code $status)" );
 
-							$cartUrl = $woocommerce->cart->get_cart_url();
+							$cart_url = $woocommerce->cart->get_cart_url();
 
-							wp_redirect( $cartUrl, 200 );
+							wp_redirect( $cart_url, 200 );
 
 						} else {
 							$order->update_status( 'failed' );
-							$order->add_order_note( $this->getResponseCodes( $status ) . " (Code $status)" );
+							$order->add_order_note( $this->get_response_codes( $status ) . " (Code $status)" );
 							$woocommerce->cart->empty_cart();
 
 						}
@@ -480,16 +478,21 @@ function woocommerce_tpayway_gateway() {
 							$table_name,
 							array(
 								'response_code'      => $status,
-								'response_code_desc' => $this->getResponseCodes( $status ),
+								'response_code_desc' => $this->get_response_codes( $status ),
 								'reason_code'        => $status,
 								'status'             => $status,
 							),
 							array( 'transaction_id' => $_POST['pgw_order_id'] )
 						);
 
-						$text  = '<html><meta charset="utf-8"><body><center style="font-family:Verdana">A payment was not successfull or declined. <br
-                        />Reason: ' . $this->getResponseCodes( $status ) . '<br/>Order Id: ' . $_POST['pgw_order_id'];
-						$text .= '<br />Preusmjeravanje...</center><script>setTimeout(function(){ window.location.replace("' . $this->responce_url_fail . '"); },3000);</script></body></html>';
+						$text  = '<html><meta charset="utf-8"><body><center style="font-family:Verdana">';
+						$text .= __( 'A payment was not successfull or declined', 'tcom-payway-wc' ) . '<br>';
+						$text .= __( 'Reason: ', 'tcom-payway-wc' );
+						$text .= $this->get_response_codes( $status ) . '<br>';
+						$text .= __( 'Order Id: ', 'tcom-payway-wc' );
+						$text .= $_POST['pgw_order_id'] . '<br>';
+						$text .= __( 'Redirecting...', 'tcom-payway-wc' );
+						$text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
 
 						echo $text;
 
@@ -522,7 +525,7 @@ function woocommerce_tpayway_gateway() {
 
 	}
 
-	$WC = new WC_TPAYWAY();
+	$wc = new WC_TPAYWAY();
 
 	function woocommerce_add_tpayway_gateway( $methods ) {
 		$methods[] = 'WC_TPAYWAY';
