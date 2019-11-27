@@ -22,4 +22,4 @@ class Payway_Wp_List_Table {
 	}
 }
 
-require_once( 'payway_wp_list_table.php' );
+require_once plugin_basename( 'classes/admin/class-paywaydata-list-table.php' );
