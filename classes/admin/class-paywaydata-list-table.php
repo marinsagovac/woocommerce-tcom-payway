@@ -19,18 +19,18 @@ class PayWayData_List_Table extends WP_List_Table {
 		$data = $this->table_data();
 		usort( $data, array( &$this, 'sort_data' ) );
 
-		$perPage     = 20;
-		$currentPage = $this->get_pagenum();
-		$totalItems  = count( $data );
+		$per_page     = 20;
+		$current_page = $this->get_pagenum();
+		$total_items  = count( $data );
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => $totalItems,
-				'per_page'    => $perPage,
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
 			)
 		);
 
-		$data = array_slice( $data, ( ( $currentPage - 1 ) * $perPage ), $perPage );
+		$data = array_slice( $data, ( ( $current_page - 1 ) * $per_page ), $per_page );
 
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->items           = $data;
@@ -136,7 +136,7 @@ class PayWayData_List_Table extends WP_List_Table {
 
 		$result = strnatcmp( $a[ $orderby ], $b[ $orderby ] );
 
-		if ( $order === 'asc' ) {
+		if ( 'asc' === $order ) {
 			return $result;
 		}
 

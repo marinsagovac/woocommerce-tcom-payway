@@ -22,4 +22,4 @@ class Payway_Wp_List_Table {
 	}
 }
 
-require_once plugin_basename( 'classes/admin/class-paywaydata-list-table.php' );
+require_once TCOM_PAYWAY_DIR . 'classes/admin/class-paywaydata-list-table.php';

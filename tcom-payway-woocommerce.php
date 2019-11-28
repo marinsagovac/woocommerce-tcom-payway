@@ -1,16 +1,28 @@
 <?php
 /*
- * Date: January 2018
  * Plugin Name: WooCommerce T-Com PayWay
- * Plugin URI: https://github.com/marinsagovac/woocommerce-tcom-payway
+ * Plugin URI:  https://github.com/Micemade/woocommerce-tcom-payway
  * Description: T-Com PayWay payment gateway
- * version: 1.3
- * Author: Marin Sagovac (Marin Šagovac)
- * Developers: Marin Sagovac (Marin Šagovac), Matija Kovacevic (Matija Kovačević), Danijel Gubic (Danijel Gubić), Ivan Švaljek, Alen Širola (Micemade)
+ * Version:     1.3
+ * Licence:     MIT
+ * License URI: https://opensource.org/licenses/MIT
+ * Author:      Micemade, Marin Šagovac
+ * Developers:  Marin Šagovac, Matija Kovačević, Danijel Gubić, Ivan Švaljek, Micemade
+ * Text Domain: tcom-payway-wc
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
+}
+
+// Plugin directory, with trailing slash.
+if ( ! defined( 'TCOM_PAYWAY_DIR' ) ) {
+	define( 'TCOM_PAYWAY_DIR', plugin_dir_path( __FILE__ ) );
+}
+
+// Plugin URL, with trailing slash.
+if ( ! defined( 'TCOM_PAYWAY_URL' ) ) {
+	define( 'TCOM_PAYWAY_URL', plugin_dir_url( __FILE__ ) );
 }
 
 load_plugin_textdomain( 'tcom-payway-wc', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
@@ -23,7 +35,7 @@ function woocommerce_tpayway_gateway() {
 		return;
 	}
 
-	require_once plugin_basename( 'classes/class-wc-tpayway.php' );
+	require_once TCOM_PAYWAY_DIR . 'classes/class-wc-tpayway.php';
 
 	$wc = new WC_TPAYWAY();
 
@@ -93,6 +105,6 @@ register_activation_hook( __FILE__, 'jal_install_tpayway' );
 register_activation_hook( __FILE__, 'jal_install_data_tpayway' );
 
 if ( is_admin() ) {
-	require_once plugin_basename( 'classes/admin/class-payway-wp-list-table.php' );
+	require_once TCOM_PAYWAY_DIR . 'classes/admin/class-payway-wp-list-table.php';
 	new Payway_Wp_List_Table();
 }

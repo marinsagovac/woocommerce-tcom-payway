@@ -3,31 +3,31 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 
 	public function __construct() {
 
-		$plugin_dir         = plugin_dir_url( __FILE__ );
 		$this->id           = 'WC_TPAYWAY';
-		$this->icon         = apply_filters( 'woocommerce_payway_icon', '' . $plugin_dir . '/assets/images/payway.png' );
+		$this->icon         = apply_filters( 'woocommerce_payway_icon', TCOM_PAYWAY_URL . 'assets/images/payway.png' );
 		$this->method_title = 'T-Com PayWay';
 		$this->has_fields   = false;
 
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title               = $this->settings['title'];
-		$this->description         = $this->settings['description'];
-		$this->shop_id             = $this->settings['mer_id'];
-		$this->acq_id              = $this->settings['acq_id'];
-		$this->pg_domain           = $this->settings['pg_domain'];
-		$this->response_url_sucess = $this->settings['response_url_sucess'];
-		$this->response_url_fail   = $this->settings['response_url_fail'];
-		$this->checkout_msg        = $this->settings['checkout_msg'];
-		$this->woo_active          = $this->settings['woo_active'];
+		$settings = $this->settings;
+
+		$this->title                = isset( $settings['title'] ) ? $settings['title'] : '';
+		$this->shop_id              = isset( $settings['mer_id'] ) ? $settings['mer_id'] : '';
+		$this->acq_id               = isset( $settings['acq_id'] ) ? $settings['acq_id'] : '';
+		$this->pg_domain            = isset( $settings['pg_domain'] ) ? $settings['pg_domain'] : '';
+		$this->response_url_success = isset( $settings['response_url_success'] ) ? $settings['response_url_success'] : $this->get_return_url( $order );
+		$this->response_url_fail    = isset( $settings['response_url_fail'] ) ? $settings['response_url_fail'] : $order->get_cancel_order_url();
+		$this->checkout_msg         = isset( $settings['checkout_msg'] ) ? $settings['checkout_msg'] : '';
+		$this->woo_active           = isset( $settings['woo_active'] ) ? $settings['woo_active'] : '';
 
 		$this->msg['message'] = '';
 		$this->msg['class']   = '';
 
 		add_action( 'init', array( &$this, 'check_tcompayway_response' ) );
 
-		if ( version_compare( WOOCOMMERCE_version, '2.0.0', '>=' ) ) {
+		if ( version_compare( WOOCOMMERCE_VERSION, '2.0.0', '>=' ) ) {
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( &$this, 'process_admin_options' ) );
 		} else {
 			add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
@@ -57,61 +57,61 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		};
 
 		$this->form_fields = array(
-			'enabled'           => array(
+			'enabled'              => array(
 				'title'   => __( 'Enable/Disable', 'tcom-payway-wc' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable T-Com PayWay Module.', 'tcom-payway-wc' ),
 				'default' => 'no',
 			),
-			'title'             => array(
+			'title'                => array(
 				'title'       => __( 'Title:', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'tcom-payway-wc' ),
 				'default'     => __( 'T-Com PayWay', 'tcom-payway-wc' ),
 			),
-			'description'       => array(
+			'description'          => array(
 				'title'       => __( 'Description:', 'tcom-payway-wc' ),
 				'type'        => 'textarea',
 				'description' => __( 'This controls the description which the user sees during checkout.', 'tcom-payway-wc' ),
 				'default'     => __( 'T-Com Payway is secure payment gateway in Croatia and you can pay using this payment in other currency.', 'tcom-payway-wc' ),
 			),
-			'pg_domain'         => array(
+			'pg_domain'            => array(
 				'title'       => __( 'Authorize URL:', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => __( 'T-Com PayWay data submiting to this URL', 'tcom-payway-wc' ),
 				'default'     => __( 'https://pgw.ht.hr/services/payment/api/authorize-form', 'tcom-payway-wc' ),
 			),
-			'mer_id'            => array(
+			'mer_id'               => array(
 				'title'       => __( 'Shop ID:', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => __( 'Unique id for the merchant acc, given by bank.', 'tcom-payway-wc' ),
 				'default'     => '',
 			),
-			'acq_id'            => array(
+			'acq_id'               => array(
 				'title'       => __( 'Secret Key:', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => '',
 				'default'     => '',
 			),
-			'mer_id'            => array(
+			'response_url_success' => array(
 				'title'       => __( 'Response URL success', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => '',
 				'default'     => '',
 			),
-			'response_url_fail' => array(
+			'response_url_fail'    => array(
 				'title'       => __( 'Response URL fail:', 'tcom-payway-wc' ),
 				'type'        => 'text',
 				'description' => '',
 				'default'     => '',
 			),
-			'checkout_msg'      => array(
+			'checkout_msg'         => array(
 				'title'       => __( 'Message redirect:', 'tcom-payway-wc' ),
 				'type'        => 'textarea',
 				'description' => __( 'Message to client when redirecting to PayWay page', 'tcom-payway-wc' ),
 				'default'     => '',
 			),
-			'woo_active'        => $woo_active,
+			'woo_active'           => $woo_active,
 		);
 	}
 
@@ -147,6 +147,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		$productinfo = "Order $order_id";
 
 		$curr_symbole = get_woocommerce_currency();
+		$order_total  = $order->get_total();
 
 		$table_name = $wpdb->prefix . 'tpayway_ipg';
 		$check_oder = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE transaction_id = '" . $order_id . "'" );
@@ -157,7 +158,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 					'response_code'      => '',
 					'response_code_desc' => '',
 					'reason_code'        => '',
-					'amount'             => ( $order->order_total ),
+					'amount'             => $order_total,
 					'or_date'            => date( 'Y-m-d' ),
 					'status'             => '',
 				),
@@ -171,7 +172,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 					'response_code'      => '',
 					'response_code_desc' => '',
 					'reason_code'        => '',
-					'amount'             => $order->order_total,
+					'amount'             => $order_total,
 					'or_date'            => date( 'Y-m-d' ),
 					'status'             => '',
 				),
@@ -201,13 +202,13 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 				$pgw_language = 'en';
 		}
 
-		$order->order_total = $order->order_total;
+		// $order->order_total = $order->order_total;
 		if ( 'HR' === $woocommerce->customer->country ) {
 			if ( 'HRK' === $order->get_order_currency() ) {
-				$order->order_total = $order->order_total;
+				$order_total = $order_total;
 			}
 		} else {
-			$order->order_total = $order->order_total;
+			$order_total = $order_total;
 		}
 
 		$curr_symbole = get_woocommerce_currency();
@@ -233,34 +234,34 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		}
 
 		if ( $convert && is_numeric( $hrk_rate ) ) {
-			$order->order_total = $woocommerce->cart->total * ( 1 / $hrk_rate );
+			$order_total = $woocommerce->cart->total * ( 1 / $hrk_rate );
 		}
 
-		$order_format_value = str_pad( ( $order->order_total * 100 ), 12, '0', STR_PAD_LEFT );
-		$total_amount       = number_format( $order->order_total, 2, '', '' );
+		$order_format_value = str_pad( ( $order_total * 100 ), 12, '0', STR_PAD_LEFT );
+		$total_amount       = number_format( $order_total, 2, '', '' );
 
 		$method                 = 'authorize-form'; // method type
-		$pwg_installments       = '1'; // broj rata
-		$pgw_card_type_id       = '1'; // tip kartice
-		$secret_key             = $this->acq_id; // Secret key
+		$pwg_installments       = '1';              // broj rata
+		$pgw_card_type_id       = '1';              // tip kartice
+		$secret_key             = $this->acq_id;    // Secret key
 		$pgw_authorization_type = '0';
 
 		$pgw_shop_id  = $this->shop_id;
 		$pgw_order_id = $order_id;
 		$pgw_amount   = $total_amount;
 
-		$pgw_success_url = $this->mer_id;
-		$pgw_failure_url = $this->response_url_fail;
+		$pgw_success_url = $this->response_url_success; // in settings ( __construct )
+		$pgw_failure_url = $this->response_url_fail;    // in settings ( __construct )
 
 		$order          = new WC_Order( $order_id );
-		$pgw_first_name = $order->billing_first_name;
-		$pgw_last_name  = $order->billing_last_name;
-		$pgw_street     = $woocommerce->customer->address;
-		$pgw_city       = $woocommerce->customer->city;
-		$pgw_post_code  = $woocommerce->customer->postcode;
-		$pgw_country    = $woocommerce->customer->country;
-		$pgw_telephone  = $order->billing_phone;
-		$pgw_email      = $order->billing_email;
+		$pgw_first_name = $order->get_billing_first_name();
+		$pgw_last_name  = $order->get_billing_last_name();
+		$pgw_street     = $order->get_billing_address_1() . ', ' . $order->get_billing_address_2();
+		$pgw_city       = $order->get_billing_city();
+		$pgw_post_code  = $order->get_billing_postcode();
+		$pgw_country    = $order->get_billing_country();
+		$pgw_telephone  = $order->get_billing_phone();
+		$pgw_email      = $order->get_billing_email();
 
 		$pgw_signature = hash(
 			'sha512',
@@ -288,7 +289,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 			'pgw_order_id'           => $pgw_order_id,
 			'pgw_amount'             => $pgw_amount,
 			'pgw_authorization_type' => $pgw_authorization_type,
-			'pgw_success_url'        => $this->mer_id,
+			'pgw_success_url'        => $this->response_url_success,
 			'pgw_failure_url'        => $this->response_url_fail,
 			'pgw_language'           => $pgw_language,
 			'pgw_signature'          => $pgw_signature,
@@ -300,7 +301,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 			'pgw_country'            => $pgw_country,
 			'pgw_telephone'          => $pgw_telephone,
 			'pgw_email'              => $pgw_email,
-			'acq_id'                 => $this > acq_id, // secret key
+			'acq_id'                 => $this->acq_id, // secret key
 			'PurchaseAmt'            => $order_format_value,
 		);
 
@@ -312,7 +313,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		}
 
 		return '<p>' . $percentage_msg . '</p>
-    <p>Total amount will be <b>' . number_format( ( $order->order_total ) ) . ' ' . $curr_symbole . '</b></p>
+    <p>Total amount will be <b>' . number_format( ( $order_total ) ) . ' ' . $curr_symbole . '</b></p>
     <form action="' . $this->pg_domain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
         ' . implode( '', $form_args_array ) . '
         <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __( 'Pay via PayWay', 'tcom-payway-wc' ) . '" />
@@ -358,8 +359,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 			1201 => __( 'Incorrect order info (pgw_order_info)', 'tcom-payway-wc' ),
 			1202 => __( 'Incorrect order items (pgw_order_items)', 'tcom-payway-wc' ),
 			1300 => __( 'Incorrect return method (pgw_return_method)', 'tcom-payway-wc' ),
-			1301 => __( 'Incorrect povratni url na dućan (pgw_success_url)', 'tcom-payway-wc' ),
-			1302 => __( 'Incorrect povratni url na dućan (pgw_failure_url)', 'tcom-payway-wc' ),
+			1301 => __( 'Incorrect success store url (pgw_success_url)', 'tcom-payway-wc' ),
+			1302 => __( 'Incorrect error store url (pgw_failure_url)', 'tcom-payway-wc' ),
 			1304 => __( 'Incorrect merchant data (pgw_merchant_data)', 'tcom-payway-wc' ),
 			1400 => __( 'Incorrect buyer\'s name (pgw_first_name)', 'tcom-payway-wc' ),
 			1401 => __( 'Incorrect buyer\'s last name (pgw_last_name)', 'tcom-payway-wc' ),
@@ -378,12 +379,12 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		global $woocommerce;
 
 		if ( isset( $_POST['pgw_order_id'] ) && isset( $_POST['pgw_trace_ref'] ) ) {
-			$order_id = sanitize( $_POST['pgw_order_id'] );
+			$order_id = $this->sanitize( $_POST['pgw_order_id'] );
 
 			if ( '' !== $order_id ) {
 
 				$order  = new WC_Order( $order_id );
-				$amount = sanitize( $_POST['amount'] );
+				$amount = $this->sanitize( $_POST['amount'] );
 				$status = isset( $_POST['pgw_result_code'] ) ? (int) $_POST['pgw_result_code'] : 0;
 
 				if ( 0 === $status ) {
@@ -398,10 +399,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 							'reason_code'        => $status,
 							'status'             => $status,
 						),
-						array( 'transaction_id' => sanitize( $_POST['pgw_order_id'] ) )
+						array( 'transaction_id' => $this->sanitize( $_POST['pgw_order_id'] ) )
 					);
 
-					$order_note = __( 'T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc' ) . sanitize( $_POST['pgw_order_id'] );
+					$order_note = __( 'T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc' ) . $this->sanitize( $_POST['pgw_order_id'] );
 					$order->add_order_note( esc_html( $order_note ) );
 					$woocommerce->cart->empty_cart();
 
@@ -430,7 +431,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 
 					$order->payment_complete();
 
-					wp_redirect( $this->mer_id, 200 );
+					wp_redirect( $this->response_url_success, 200 );
 				} else {
 
 					if ( 3 === $status ) {
@@ -459,7 +460,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 							'reason_code'        => $status,
 							'status'             => $status,
 						),
-						array( 'transaction_id' => sanitize( $_POST['pgw_order_id'] ) )
+						array( 'transaction_id' => $this->sanitize( $_POST['pgw_order_id'] ) )
 					);
 
 					$text  = '<html><meta charset="utf-8"><body><center style="font-family:Verdana">';
@@ -467,7 +468,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 					$text .= __( 'Reason: ', 'tcom-payway-wc' );
 					$text .= $this->get_response_codes( $status ) . '<br>';
 					$text .= __( 'Order Id: ', 'tcom-payway-wc' );
-					$text .= sanitize( $_POST['pgw_order_id'] ) . '<br>';
+					$text .= $this->sanitize( $_POST['pgw_order_id'] ) . '<br>';
 					$text .= __( 'Redirecting...', 'tcom-payway-wc' );
 					$text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
 
