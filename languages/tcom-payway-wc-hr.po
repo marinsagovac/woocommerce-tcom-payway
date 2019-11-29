@@ -1,0 +1,310 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce T-Com PayWay\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-27 20:52+0000\n"
+"PO-Revision-Date: 2019-11-27 21:17+0000\n"
+"Last-Translator: Haddad.hr Admin <alen@micemade.com>\n"
+"Language-Team: Hrvatski\n"
+"Language: hr\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.1; wp-5.3"
+
+#: classes/class-wc-tpayway.php:44 classes/class-wc-tpayway.php:51
+msgid "Use Woo Multi Currency conversion"
+msgstr "Koristi Woo Multi Currency konverziju "
+
+#: classes/class-wc-tpayway.php:46 classes/class-wc-tpayway.php:54
+msgid ""
+"Enable currency auto conversion for <a href=\"https://wordpress."
+"org/plugins/woo-multi-currency/\">Woo Multi Currency</a> plugin. Make sure "
+"that is checked \"Allow Multi Currency\" in plugin page."
+msgstr ""
+"Omogućiti autokonverziju za dodatak <a href=\"https://wordpress."
+"org/plugins/woo-multi-currency/\">\"Woo Multi Currency\"</a>. Provjerite je "
+"li \"Dozvoliti viševalutnost\" označena na stranici dodatka"
+
+#: classes/class-wc-tpayway.php:61
+msgid "Enable/Disable"
+msgstr "Omogući/Onemogući"
+
+#: classes/class-wc-tpayway.php:63
+msgid "Enable T-Com PayWay Module."
+msgstr "Omogućiti T-Com PayWay modul."
+
+#: classes/class-wc-tpayway.php:67
+msgid "Title:"
+msgstr "Naslov:"
+
+#: classes/class-wc-tpayway.php:69
+msgid "This controls the title which the user sees during checkout."
+msgstr "Ovo kontrolira naslov koji će kupac koristi prilikom procesa naplate."
+
+#: classes/class-wc-tpayway.php:70
+msgid "T-Com PayWay"
+msgstr "T-Com PayWay"
+
+#: classes/class-wc-tpayway.php:73
+msgid "Description:"
+msgstr "Opis:"
+
+#: classes/class-wc-tpayway.php:75
+msgid "This controls the description which the user sees during checkout."
+msgstr "Ovo kontrolira opis koji će kupac koristiti prilikom procesa naplate."
+
+#: classes/class-wc-tpayway.php:76
+msgid ""
+"T-Com Payway is secure payment gateway in Croatia and you can pay using this "
+"payment in other currency."
+msgstr ""
+"T-Com PayWay je siguran pristupnik plaćanja u Hrvatskoj u kojem se može "
+"izvršiti plaćanja i u drugim valutama."
+
+#: classes/class-wc-tpayway.php:79
+msgid "Authorize URL:"
+msgstr "URL adresa autorizacije"
+
+#: classes/class-wc-tpayway.php:81
+msgid "T-Com PayWay data submiting to this URL"
+msgstr "Podaci T-Com PayWay poslani na ovaj URL"
+
+#: classes/class-wc-tpayway.php:82
+msgid "https://pgw.ht.hr/services/payment/api/authorize-form"
+msgstr "https://pgw.ht.hr/services/payment/api/authorize-form"
+
+#: classes/class-wc-tpayway.php:85
+msgid "Shop ID:"
+msgstr "ID broj trgovine:"
+
+#: classes/class-wc-tpayway.php:87
+msgid "Unique id for the merchant acc, given by bank."
+msgstr "Jedinstveni ID za račun trgovca koji omogućava banka."
+
+#: classes/class-wc-tpayway.php:91
+msgid "Secret Key:"
+msgstr "Tajni ključ:"
+
+#: classes/class-wc-tpayway.php:97
+msgid "Response URL success"
+msgstr "URL adresa za uspješnu transakciju"
+
+#: classes/class-wc-tpayway.php:103
+msgid "Response URL fail:"
+msgstr "URL adresa za neuspješnu transakciju"
+
+#: classes/class-wc-tpayway.php:109
+msgid "Message redirect:"
+msgstr "Poruka za redirekciju:"
+
+#: classes/class-wc-tpayway.php:111
+msgid "Message to client when redirecting to PayWay page"
+msgstr "Poruka kupcu kod redirekcije na stranicu PayWay"
+
+#. Description of the plugin
+#: classes/class-wc-tpayway.php:119
+msgid "T-Com PayWay payment gateway"
+msgstr "T-Com PayWay pristupnik plaćanja"
+
+#: classes/class-wc-tpayway.php:120
+msgid ""
+"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">T-Com PayWay</a> is "
+"payment gateway from telecom T-Com who provides payment gateway services as "
+"dedicated services to clients in Croatia."
+msgstr ""
+"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">T-Com PayWay</a> je "
+"pristupnik plaćanja T-Com-a koji omogućava usluge proces naplate kao "
+"dedicated usluge klijentima u Hrvatskoj."
+
+#: classes/class-wc-tpayway.php:318
+msgid "Pay via PayWay"
+msgstr "Plati putem PayWaya"
+
+#: classes/class-wc-tpayway.php:319
+msgid "Cancel order &amp; restore cart"
+msgstr "Otkazivanje narudžbe i vraćanje na košaricu"
+
+#: classes/class-wc-tpayway.php:340
+msgid "Action successful"
+msgstr "Akcija uspješna"
+
+#: classes/class-wc-tpayway.php:341
+msgid "Action unsuccessful"
+msgstr "Akcija neuspješna"
+
+#: classes/class-wc-tpayway.php:342
+msgid "Error processing"
+msgstr "Greška u procesiranju"
+
+#: classes/class-wc-tpayway.php:343
+msgid "Action cancelled"
+msgstr "Akcija je otkazana"
+
+#: classes/class-wc-tpayway.php:344
+msgid "Action unsuccessful (3D Secure MPI)"
+msgstr "Akcija neuspješna (3D Secure MPI)"
+
+#: classes/class-wc-tpayway.php:345
+msgid "Incorrect signature (pwg_signature)"
+msgstr "Neispravan potpis (pwg_signature)"
+
+#: classes/class-wc-tpayway.php:346
+msgid "Incorrect store ID (pgw_shop_id)"
+msgstr "Neispravan ID trgovine (pgw_shop_id)"
+
+#: classes/class-wc-tpayway.php:347
+msgid "Incorrect transaction ID (pgw_transaction_id)"
+msgstr "Neispravan ID transakcije (pgw_transaction_id)"
+
+#: classes/class-wc-tpayway.php:348
+msgid "Incorrect amount (pgw_amount)"
+msgstr "Neispavan iznos (pgw_amount)"
+
+#: classes/class-wc-tpayway.php:349
+msgid "Incorrect authorization_type (pgw_authorization_type)"
+msgstr "Neispravna vrsta autorizacije (pgw_authorization_type)"
+
+#: classes/class-wc-tpayway.php:350
+msgid "Incorrect announcement duration (pgw_announcement_duration)"
+msgstr "Neispravno trajanje najave (pgw_announcement_duration)"
+
+#: classes/class-wc-tpayway.php:351
+msgid "Incorrect installments number (pgw_installments)"
+msgstr "Neispravan broj rata (pgw_installments)"
+
+#: classes/class-wc-tpayway.php:352
+msgid "Incorrect language (pgw_language)"
+msgstr "Neispravan jezik (pgw_language)"
+
+#: classes/class-wc-tpayway.php:353
+msgid "Incorrect authorization token (pgw_authorization_token)"
+msgstr "Neispravan autorizacijski kod (pgw_authorization_token)"
+
+#: classes/class-wc-tpayway.php:354
+msgid "Incorrect card number (pgw_card_number)"
+msgstr "Neispravan broj kartice (pgw_card_number)"
+
+#: classes/class-wc-tpayway.php:355
+msgid "Incorrect card expiration date (pgw_card_expiration_date)"
+msgstr "Neispravan datum isteka kartice (pgw_card_expiration_date)"
+
+#: classes/class-wc-tpayway.php:356
+msgid "Incorrect card verification data (pgw_card_verification_data)"
+msgstr "Neispravni podaci verifikacije kartice (pgw_card_verification_data)"
+
+#: classes/class-wc-tpayway.php:357
+msgid "Incorrect order ID (pgw_order_id)"
+msgstr "Neispravan broj narudžbe (pgw_order_id)"
+
+#: classes/class-wc-tpayway.php:358
+msgid "Incorrect order info (pgw_order_info)"
+msgstr "Neispravan info narudžbe (pgw_order_info)"
+
+#: classes/class-wc-tpayway.php:359
+msgid "Incorrect order items (pgw_order_items)"
+msgstr "Neispravni artikli narudžbe (pgw_order_items)"
+
+#: classes/class-wc-tpayway.php:360
+msgid "Incorrect return method (pgw_return_method)"
+msgstr "Neispravna povratna metoda (pgw_return_method)"
+
+#: classes/class-wc-tpayway.php:361
+msgid "Incorrect success store url (pgw_success_url)"
+msgstr "Neispravna URL adresa povratka na trgovinu (pgw_success_url)"
+
+#: classes/class-wc-tpayway.php:362
+msgid "Incorrect error store url (pgw_failure_url)"
+msgstr "Neispravna URL adresa trgovine za grešku (pgw_failure_url)"
+
+#: classes/class-wc-tpayway.php:363
+msgid "Incorrect merchant data (pgw_merchant_data)"
+msgstr "Neispravni podaci trgovca (pgw_merchant_data)"
+
+#: classes/class-wc-tpayway.php:364
+msgid "Incorrect buyer's name (pgw_first_name)"
+msgstr "Neispravno ime kupca (pgw_first_name)"
+
+#: classes/class-wc-tpayway.php:365
+msgid "Incorrect buyer's last name (pgw_last_name)"
+msgstr "Neispravno prezime (pgw_last_name)"
+
+#: classes/class-wc-tpayway.php:366
+msgid "Incorrect address (pgw_street)"
+msgstr "Neispravna adresa (pgw_street)"
+
+#: classes/class-wc-tpayway.php:367
+msgid "Incorrect city (pgw_city)"
+msgstr "Neispravan grad (pgw_city)"
+
+#: classes/class-wc-tpayway.php:368
+msgid "Incorrect ZIP code (pgw_post_code)"
+msgstr "Neispravan poštanski broj (pgw_post_code)"
+
+#: classes/class-wc-tpayway.php:369
+msgid "Incorrect country (pgw_country)"
+msgstr "Neispravna zemlja (pgw_country)"
+
+#: classes/class-wc-tpayway.php:370
+msgid "Incorrect contact phone (pgw_telephone)"
+msgstr "Neispravni kontakt telefon (pgw_telephone)"
+
+#: classes/class-wc-tpayway.php:371
+msgid "Incorrect contact e-mail address (pgw_email)"
+msgstr "Neispravna e-mail adresa (pgw_email)"
+
+#: classes/class-wc-tpayway.php:404
+msgid "T-Com PAYWAY payment successful. Unique Id: "
+msgstr "T-Com PayWay plaćanje uspješno. Jedinstveni ID:"
+
+#: classes/class-wc-tpayway.php:409
+msgid "Awaiting payment"
+msgstr "Čekanje plaćanja"
+
+#: classes/class-wc-tpayway.php:416
+msgid "Payment successful"
+msgstr "Plaćanje uspješno"
+
+#: classes/class-wc-tpayway.php:418
+msgid ""
+"Payment on T-Com PayWay is successfully completeted and order status is "
+"processed."
+msgstr ""
+"Plaćanje na T-Com PayWayu je uspješno završeno i status narudžbe je "
+"procesiran."
+
+#: classes/class-wc-tpayway.php:425
+#, php-format
+msgid "Payment for order no. %s was sucessful."
+msgstr "Plaćanje za narudžbu broj %s je bilo uspješno."
+
+#: classes/class-wc-tpayway.php:466
+msgid "A payment was not successfull or declined"
+msgstr "Plaćanje nije uspjelo ili je odbijeno"
+
+#: classes/class-wc-tpayway.php:467
+msgid "Reason: "
+msgstr "Razlog:"
+
+#: classes/class-wc-tpayway.php:469
+msgid "Order Id: "
+msgstr "Broj narudžbe:"
+
+#: classes/class-wc-tpayway.php:471
+msgid "Redirecting..."
+msgstr "Preusmjeravanje ..."
+
+#. Name of the plugin
+msgid "WooCommerce T-Com PayWay"
+msgstr "WooCommerce T-Com PayWay"
+
+#. URI of the plugin
+msgid "https://github.com/marinsagovac/woocommerce-tcom-payway"
+msgstr "https://github.com/marinsagovac/woocommerce-tcom-payway"
+
+#. Author of the plugin
+msgid "Marin Sagovac (Marin Šagovac)"
+msgstr "Marin Sagovac (Marin Šagovac)"

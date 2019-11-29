@@ -3,14 +3,6 @@ Woocommerce plugin for payment service using T-Com payment gateway service in Cr
 
 T-Com PayWay is payment gateway service for Croatia only.
 
-## Donations
-
-A donations are possible to receive on PayPal. All contributors will receive on same amount that is available after payment.
-
-A contrbutors that are pushed to project will be also received regulary payments. All contributors will be received payments on same amount of total received donations.
-
-You can pay any amount to PayPal: https://www.paypal.me/codervio?locale.x=en_US
-
 ## API
 
 Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Official T-Com Croatia [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/poslovna-rjesenja/web-shop#payway).
@@ -27,7 +19,7 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 ## RELEASES
 
-* Latest Release (February 2018): [Download](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/latest)
+* Version 1.3 not yet released
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
 * Release [1.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.0)
@@ -39,6 +31,13 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 Download ZIP archive, upload via plugin page and apply package. Activate plugin. Change settings under Woocomerce settings page on the checkout page.
 
 ## CHANGELOG
+
+### 1.3
+
+* Complete code review and files reorganisation
+* Added textdomain and translations
+* Applied WP Coding Standards
+* Fixed deprecated WC Order methods
 
 ### 1.2
 

@@ -1,0 +1,300 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce T-Com PayWay\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-27 20:52+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.1; wp-5.3"
+
+#: classes/class-wc-tpayway.php:44 classes/class-wc-tpayway.php:51
+msgid "Use Woo Multi Currency conversion"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:46 classes/class-wc-tpayway.php:54
+msgid ""
+"Enable currency auto conversion for <a href=\"https://wordpress."
+"org/plugins/woo-multi-currency/\">Woo Multi Currency</a> plugin. Make sure "
+"that is checked \"Allow Multi Currency\" in plugin page."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:61
+msgid "Enable/Disable"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:63
+msgid "Enable T-Com PayWay Module."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:67
+msgid "Title:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:69
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:70
+msgid "T-Com PayWay"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:73
+msgid "Description:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:75
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:76
+msgid ""
+"T-Com Payway is secure payment gateway in Croatia and you can pay using this "
+"payment in other currency."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:79
+msgid "Authorize URL:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:81
+msgid "T-Com PayWay data submiting to this URL"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:82
+msgid "https://pgw.ht.hr/services/payment/api/authorize-form"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:85
+msgid "Shop ID:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:87
+msgid "Unique id for the merchant acc, given by bank."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:91
+msgid "Secret Key:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:97
+msgid "Response URL success"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:103
+msgid "Response URL fail:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:109
+msgid "Message redirect:"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:111
+msgid "Message to client when redirecting to PayWay page"
+msgstr ""
+
+#. Description of the plugin
+#: classes/class-wc-tpayway.php:119
+msgid "T-Com PayWay payment gateway"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:120
+msgid ""
+"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">T-Com PayWay</a> is "
+"payment gateway from telecom T-Com who provides payment gateway services as "
+"dedicated services to clients in Croatia."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:318
+msgid "Pay via PayWay"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:319
+msgid "Cancel order &amp; restore cart"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:340
+msgid "Action successful"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:341
+msgid "Action unsuccessful"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:342
+msgid "Error processing"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:343
+msgid "Action cancelled"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:344
+msgid "Action unsuccessful (3D Secure MPI)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:345
+msgid "Incorrect signature (pwg_signature)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:346
+msgid "Incorrect store ID (pgw_shop_id)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:347
+msgid "Incorrect transaction ID (pgw_transaction_id)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:348
+msgid "Incorrect amount (pgw_amount)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:349
+msgid "Incorrect authorization_type (pgw_authorization_type)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:350
+msgid "Incorrect announcement duration (pgw_announcement_duration)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:351
+msgid "Incorrect installments number (pgw_installments)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:352
+msgid "Incorrect language (pgw_language)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:353
+msgid "Incorrect authorization token (pgw_authorization_token)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:354
+msgid "Incorrect card number (pgw_card_number)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:355
+msgid "Incorrect card expiration date (pgw_card_expiration_date)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:356
+msgid "Incorrect card verification data (pgw_card_verification_data)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:357
+msgid "Incorrect order ID (pgw_order_id)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:358
+msgid "Incorrect order info (pgw_order_info)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:359
+msgid "Incorrect order items (pgw_order_items)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:360
+msgid "Incorrect return method (pgw_return_method)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:361
+msgid "Incorrect success store url (pgw_success_url)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:362
+msgid "Incorrect error store url (pgw_failure_url)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:363
+msgid "Incorrect merchant data (pgw_merchant_data)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:364
+msgid "Incorrect buyer's name (pgw_first_name)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:365
+msgid "Incorrect buyer's last name (pgw_last_name)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:366
+msgid "Incorrect address (pgw_street)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:367
+msgid "Incorrect city (pgw_city)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:368
+msgid "Incorrect ZIP code (pgw_post_code)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:369
+msgid "Incorrect country (pgw_country)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:370
+msgid "Incorrect contact phone (pgw_telephone)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:371
+msgid "Incorrect contact e-mail address (pgw_email)"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:404
+msgid "T-Com PAYWAY payment successful. Unique Id: "
+msgstr ""
+
+#: classes/class-wc-tpayway.php:409
+msgid "Awaiting payment"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:416
+msgid "Payment successful"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:418
+msgid ""
+"Payment on T-Com PayWay is successfully completeted and order status is "
+"processed."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:425
+#, php-format
+msgid "Payment for order no. %s was sucessful."
+msgstr ""
+
+#: classes/class-wc-tpayway.php:466
+msgid "A payment was not successfull or declined"
+msgstr ""
+
+#: classes/class-wc-tpayway.php:467
+msgid "Reason: "
+msgstr ""
+
+#: classes/class-wc-tpayway.php:469
+msgid "Order Id: "
+msgstr ""
+
+#: classes/class-wc-tpayway.php:471
+msgid "Redirecting..."
+msgstr ""
+
+#. Name of the plugin
+msgid "WooCommerce T-Com PayWay"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/marinsagovac/woocommerce-tcom-payway"
+msgstr ""
+
+#. Author of the plugin
+msgid "Marin Sagovac (Marin Šagovac)"
+msgstr ""
