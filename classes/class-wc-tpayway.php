@@ -7,6 +7,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		$this->icon         = apply_filters( 'woocommerce_payway_icon', TCOM_PAYWAY_URL . 'assets/images/payway.png' );
 		$this->method_title = 'T-Com PayWay';
 		$this->has_fields   = false;
+		
+		$this->version = '1.0';
 
 		$this->init_form_fields();
 		$this->init_settings();
@@ -312,7 +314,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 			$form_args_joins   = $key . '=' . $value . '&';
 		}
 
-		return '<p>' . $percentage_msg . '</p>
+		return '<p></p>
     <p>Total amount will be <b>' . number_format( ( $order_total ) ) . ' ' . $curr_symbole . '</b></p>
     <form action="' . $this->pg_domain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
         ' . implode( '', $form_args_array ) . '
