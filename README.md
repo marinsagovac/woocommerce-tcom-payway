@@ -19,18 +19,20 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 ## RELEASES
 
+* Version [1.3.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2020
 * Version [1.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2019
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
-* Release [1.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.0)
-* Release [0.9b](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9b)
-* Release [0.9a](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/0.9a)
 
 ## INSTALLATION
 
 Download ZIP archive, upload via plugin page and apply package. Activate plugin. Change settings under Woocomerce settings page on the checkout page.
 
 ## CHANGELOG
+
+### 1.3.2
+
+* Signatures typo issues fixed
 
 ### 1.3
 
