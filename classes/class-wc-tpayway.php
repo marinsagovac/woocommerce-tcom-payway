@@ -23,6 +23,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		$this->response_url_fail    = isset( $settings['response_url_fail'] ) ? $settings['response_url_fail'] : $order->get_cancel_order_url();
 		$this->checkout_msg         = isset( $settings['checkout_msg'] ) ? $settings['checkout_msg'] : '';
 		$this->woo_active           = isset( $settings['woo_active'] ) ? $settings['woo_active'] : '';
+		$this->description          = isset( $settings['description'] ? $settings['description'] : '';
 
 		$this->msg['message'] = '';
 		$this->msg['class']   = '';
