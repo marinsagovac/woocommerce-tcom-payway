@@ -243,7 +243,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 		$total_amount       = number_format( $order_total, 2, '', '' );
 
 		$method                 = 'authorize-form'; // method type
-		$pwg_installments       = '1';              // broj rata
+		$pgw_installments       = '1';              // broj rata
 		$pgw_card_type_id       = '1';              // tip kartice
 		$secret_key             = $this->acq_id;    // Secret key
 		$pgw_authorization_type = '0';
@@ -345,7 +345,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway {
 			2    => __( 'Error processing', 'tcom-payway-wc' ),
 			3    => __( 'Action cancelled', 'tcom-payway-wc' ),
 			4    => __( 'Action unsuccessful (3D Secure MPI)', 'tcom-payway-wc' ),
-			1000 => __( 'Incorrect signature (pwg_signature)', 'tcom-payway-wc' ),
+			1000 => __( 'Incorrect signature (pgw_signature)', 'tcom-payway-wc' ),
 			1001 => __( 'Incorrect store ID (pgw_shop_id)', 'tcom-payway-wc' ),
 			1002 => __( 'Incorrect transaction ID (pgw_transaction_id)', 'tcom-payway-wc' ),
 			1003 => __( 'Incorrect amount (pgw_amount)', 'tcom-payway-wc' ),
