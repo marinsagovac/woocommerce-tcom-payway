@@ -33,6 +33,7 @@ Download ZIP archive, upload via plugin page and apply package. Activate plugin.
 ### 1.3.2
 
 * Signatures typo issues fixed
+* Resolved description settings that is not shown
 
 ### 1.3
 
