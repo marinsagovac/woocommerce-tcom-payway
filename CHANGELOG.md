@@ -9,6 +9,7 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 ### 1.3.3
 
 * fixing minor bugs
+* changelog added and linked
 
 ### 1.3.2
 
