@@ -333,7 +333,7 @@ using PayWay service.', 'tcom-payway-wc'),
             'CustomerEmail' => substr($pgw_email, 0, 254),
             'CustomerPhone' => substr($pgw_telephone, 0, 20),
             // 'PaymentPlan' => 0000, // No payment plan
-            'ReturnMethod' => 'GET',
+            'ReturnMethod' => 'POST',
 
             'acq_id' => $this->acq_id, // secret key
             'PurchaseAmt' => $order_format_value,
