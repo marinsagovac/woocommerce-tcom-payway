@@ -1,8 +1,8 @@
 # Woocommerce T-Com PayWay (Croatia)
 
-[![Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png)]
+[Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png)
 
-[![PayWay](assets/images/payway-logo.png)]
+[PayWay](assets/images/payway-logo.png)
 
 # Woocommerce Payment Wordpress Plugin
 
