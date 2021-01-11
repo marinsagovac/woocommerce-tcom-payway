@@ -23,7 +23,7 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 Don't use for production. This is pre-release version or testing purposes only.
 
-* TPAYWAY with API 2.0 - [DEV](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/dev.zip
+* TPAYWAY with API 2.0 - [DEV](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/dev.zip)
 
 ### OFFICIAL RELEASES
 
