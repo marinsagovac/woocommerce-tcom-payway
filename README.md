@@ -1,7 +1,11 @@
 # Woocommerce T-Com PayWay (Croatia)
-Woocommerce plugin for payment service using T-Com payment gateway service in Croatia
 
-T-Com PayWay is payment gateway service for Croatia only.
+![Logo](assets/images/payway-logo.png)
+![Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png?rev=2366418)
+
+# Woocommerce Payment Wordpress Plugin
+
+Woocommerce plugin is payment gateway service plugin using with Hrvatski Telekom API payment gateway service.
 
 ## API
 
