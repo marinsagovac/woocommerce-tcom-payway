@@ -28,7 +28,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->title = isset($settings['title']) ? $settings['title'] : '';
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
-        $this->pg_domain = isset($settings['pg_domain']) ? $settings['pg_domain'] : '';
+        $this->pg_domain = $this->get_option( 'pg_domain' );
         $this->response_url_success = isset($settings['response_url_success']) ? $settings['response_url_success'] : $this->get_return_url($order);
         $this->response_url_fail = isset($settings['response_url_fail']) ? $settings['response_url_fail'] : $order->get_cancel_order_url();
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
@@ -94,12 +94,12 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 'type' => 'select',
                 'class' => 'wc-enhanced-select',
                 'description' => __('T-Com PayWay data submiting to this URL', $this->domain),
-                'default' => 'Production Mode',
+                'default' => 'prod',
                 'desc_tip' => true,
-                'options' => array(
-                    'Test Mode' => 'https://formtest.payway.com.hr/authorization.aspx',
-                    'Production Mode' => 'https://form.payway.com.hr/authorization.aspx',
-                )
+		'options' => array(
+			'test'      => __( 'Test Mode', 'woocommerce' ),
+			'prod' => __( 'Prod Mode', 'woocommerce' ),
+		),
             ),
             'mer_id' => array(
                 'title' => __('Shop ID:', $this->domain),
@@ -345,10 +345,15 @@ using PayWay service.', 'tcom-payway-wc'),
             $form_args_array[] = "<input type='hidden' name='$key' value='$value'/>";
             $form_args_joins = $key . '=' . $value . '&';
         }
+	    
+	    $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
+	    if ($this->pg_domain == 'test') {
+	    	$pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
+	    }
 
         return '<p></p>
     <p>Total amount will be <b>' . number_format(($order_total)) . ' ' . $curr_symbole . '</b></p>
-    <form action="' . $this->pg_domain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
+    <form action="' . $pgDomain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
         ' . implode('', $form_args_array) . '
         <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __('Pay via PayWay', 'tcom-payway-wc') . '" />
             <a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'tcom-payway-wc') . '</a>
