@@ -419,6 +419,16 @@ using PayWay service.', 'tcom-payway-wc'),
     {
         global $woocommerce;
 
+        // Return if is error during installation
+        if (!$_POST['ShoppingCartID']) {
+                return;
+        }
+        
+        if (!$_POST['PurchaseAmt']) {
+        	return;
+	}
+	// End installation
+        
         $order_id = $this->sanitize($_POST['ShoppingCartID']);
 
         $order = new WC_Order($order_id);
