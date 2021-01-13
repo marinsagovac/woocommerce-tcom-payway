@@ -291,6 +291,7 @@ using PayWay service.', 'tcom-payway-wc'),
 
         $order_format_value = str_pad(($order_total * 100), 12, '0', STR_PAD_LEFT);
         $total_amount = number_format($order_total, 2, '', '');
+	$total_amount_request = number_format($order_total, 2, ',', '');
 
         $secret_key = $this->acq_id;    // Secret key
 
@@ -315,7 +316,7 @@ using PayWay service.', 'tcom-payway-wc'),
             'ShopID' => $pgw_shop_id,
             'ShoppingCartID' => $pgw_order_id,
             'Version' => $this->version,
-            'TotalAmount' => $pgw_amount,
+            'TotalAmount' => $total_amount_request,
             'Signature' => $pgw_signature,
             'ReturnURL' => $this->response_url_success,
             'CancelURL' => $this->response_url_fail,
