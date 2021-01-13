@@ -422,7 +422,7 @@ using PayWay service.', 'tcom-payway-wc'),
         $order_id = $this->sanitize($_POST['ShoppingCartID']);
 
         $order = new WC_Order($order_id);
-        $amount = $this->sanitize($_POST['amount']);
+        $amount = $this->sanitize($_POST['PurchaseAmt']);
         $status = isset($_POST['Success']) ? (int)$_POST['Success'] : 0;
         $reasonCode = isset($_POST['ApprovalCode']) ? (int)$_POST['ApprovalCode'] : 0;
 
@@ -439,10 +439,10 @@ using PayWay service.', 'tcom-payway-wc'),
                         'reason_code' => $reasonCode,
                         'status' => 'Ok',
                     ),
-                    array('transaction_id' => $this->sanitize($_POST['pgw_order_id']))
+                    array('transaction_id' => $this->sanitize($_POST['ShoppingCartID']))
                 );
 
-                $order_note = __('T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc') . $this->sanitize($_POST['pgw_order_id']);
+                $order_note = __('T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc') . $this->sanitize($_POST['ShoppingCartID']);
                 $order->add_order_note(esc_html($order_note));
                 $woocommerce->cart->empty_cart();
 
