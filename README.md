@@ -16,13 +16,14 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 ## FEATURES
 
-* It's improvement change from old T-Com PayWay API to new API 1.0.7 using SHA512 key.
+* API 2.0 Support
 * Added autoform submit function to send customer data.
 * Added T-Com PayWay cards types
-* Example [Form](https://github.com/marinsagovac/woocommerce-tcom-payway/blob/master/docs/primjer_obrasca.png) configuration
+* Auto multilanguage detection form
 * List table of PayWay transactions on administration page
 * Locale support on PayWay based on language on Wordpress page
 * WPML and Woo Multi Currency support currency rate
+* Multilanguage support using po/mo translation
 
 ## RELEASES
 
