@@ -28,7 +28,7 @@ Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Offic
 
 ### OFFICIAL RELEASES
 
-* Version [1.4] API 2.0 (https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
+* Version [1.4 API 2.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
 * Version [1.3.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3.3) January/2021
 * Version [1.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2019
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
