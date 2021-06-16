@@ -41,7 +41,7 @@ Official T-Com Croatia [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/posl
 
 Don't use for production. This is pre-release version or testing purposes only.
 
-* TPAYWAY with API 2.0 - [DEV](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/dev.zip)
+* Dev branch - [DEV](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/dev.zip)
 
 Those release are also updated as official release 1.4. You can download from official release.
 
