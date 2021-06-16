@@ -34,6 +34,7 @@ Don't use for production. This is pre-release version or testing purposes only.
 
 ### OFFICIAL RELEASES
 
+* Version [1.4](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
 * Version [1.3.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3.3) January/2021
 * Version [1.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2019
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
