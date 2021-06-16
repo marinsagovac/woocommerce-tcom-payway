@@ -12,7 +12,9 @@ Woocommerce plugin is payment gateway service plugin using with Hrvatski Telekom
 
 ## API
 
-Latest API used for version 1.0.7 from official T-Com PayWay on July 2015. Official T-Com Croatia [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/poslovna-rjesenja/web-shop#payway).
+From version 1.4 payway plugin support with API 2.0. Below 1.4 version: API of payment gateway 1.0.7 from official T-Com PayWay on July 2015 are supported. 
+
+Official T-Com Croatia [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/poslovna-rjesenja/web-shop#payway).
 
 ## FEATURES
 
