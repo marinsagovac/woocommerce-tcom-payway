@@ -1,4 +1,6 @@
-# Woocommerce T-Com PayWay (Croatia)
+# Woocommerce HT PayWay (Croatia)
+
+Woocommerce plugin for Wordpress to support payment gateway using Hrvatski Telekom PayWay payment gateway service.
 
 ![Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png)
 
