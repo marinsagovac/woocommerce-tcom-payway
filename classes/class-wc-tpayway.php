@@ -29,7 +29,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
         $this->pg_domain = $this->get_option( 'pg_domain' );
-        $this->response_url_success = isset($settings['response_url_success']) ? $settings['response_url_success'] : $this->get_return_url($order);
+        $this->response_url_success = $this->get_return_url($order);
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
         $this->woo_active = isset($settings['woo_active']) ? $settings['woo_active'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
@@ -96,7 +96,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 'default' => 'prod',
                 'desc_tip' => true,
 		'options' => array(
-			'test'      => __( 'Test Mode', 'woocommerce' ),
+			'test' => __( 'Test Mode', 'woocommerce' ),
 			'prod' => __( 'Prod Mode', 'woocommerce' ),
 		),
             ),
@@ -109,12 +109,6 @@ using PayWay service.', 'tcom-payway-wc'),
             ),
             'acq_id' => array(
                 'title' => __('Secret Key:', $this->domain),
-                'type' => 'text',
-                'description' => '',
-                'default' => '',
-            ),
-            'response_url_success' => array(
-                'title' => __('Response URL success', $this->domain),
                 'type' => 'text',
                 'description' => '',
                 'default' => '',
