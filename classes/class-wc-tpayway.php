@@ -180,12 +180,12 @@ using PayWay service.', 'tcom-payway-wc'),
             $wpdb->update(
                 $table_name,
                 array(
-                    'response_code' => '',
+                    'response_code' => 0,
                     'response_code_desc' => '',
                     'reason_code' => '',
                     'amount' => $order_total,
                     'or_date' => date('Y-m-d'),
-                    'status' => '',
+                    'status' => 0,
                 ),
                 array('transaction_id' => $order_id)
             );
@@ -194,12 +194,12 @@ using PayWay service.', 'tcom-payway-wc'),
                 $table_name,
                 array(
                     'transaction_id' => $order_id,
-                    'response_code' => '',
+                    'response_code' => 0,
                     'response_code_desc' => '',
                     'reason_code' => '',
                     'amount' => $order_total,
                     'or_date' => date('Y-m-d'),
-                    'status' => '',
+                    'status' => 0,
                 ),
                 array('%s', '%d')
             );
