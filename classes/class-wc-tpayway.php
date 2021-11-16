@@ -453,7 +453,7 @@ using PayWay service.', 'tcom-payway-wc'),
                         'response_code' => $status,
                         'response_code_desc' => $this->get_response_codes(0),
                         'reason_code' => $reasonCode,
-                        'status' => 'Ok',
+                        'status' => 1,
                     ),
                     array('transaction_id' => $order_id)
                 );
@@ -508,7 +508,7 @@ using PayWay service.', 'tcom-payway-wc'),
                         'response_code' => 0,
                         'response_code_desc' => $errorCodes,
                         'reason_code' => 0,
-                        'status' => 'Error',
+                        'status' => 0,
                     ),
                     array('transaction_id' => $order_id)
                 );
@@ -545,7 +545,7 @@ using PayWay service.', 'tcom-payway-wc'),
                         'response_code' => $responseCode,
                         'response_code_desc' => $this->get_response_codes($responseCode),
                         'reason_code' => 0,
-                        'status' => 'Cancelled',
+                        'status' => 0,
                     ),
                     array('transaction_id' => $order_id)
                 );
