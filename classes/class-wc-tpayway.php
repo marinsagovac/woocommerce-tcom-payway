@@ -430,7 +430,7 @@ using PayWay service.', 'tcom-payway-wc'),
                 return;
         }
         
-        if (!$_POST['PurchaseAmt']) {
+        if (!$_POST['Amount']) {
         	return;
 	}
 	// End installation
@@ -438,7 +438,7 @@ using PayWay service.', 'tcom-payway-wc'),
         $order_id = $this->sanitize($_POST['ShoppingCartID']);
 
         $order = new WC_Order($order_id);
-        $amount = $this->sanitize($_POST['PurchaseAmt']);
+        $amount = $this->sanitize($_POST['Amount']);
         $status = isset($_POST['Success']) ? (int)$_POST['Success'] : 0;
         $reasonCode = isset($_POST['ApprovalCode']) ? (int)$_POST['ApprovalCode'] : 0;
 
@@ -487,7 +487,8 @@ using PayWay service.', 'tcom-payway-wc'),
 
                 $order->payment_complete();
 
-                wp_redirect($this->response_url_success, 200);
+                wp_redirect($this->response_url_success, 302);
+		exit;
             }
         }
 
