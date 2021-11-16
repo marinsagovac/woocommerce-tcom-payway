@@ -435,7 +435,7 @@ using PayWay service.', 'tcom-payway-wc'),
 	}
 	// End installation
         
-        $order_id = $this->sanitize($_POST['ShoppingCartID']);
+        $order_id = $_POST['ShoppingCartID'];
 
         $order = new WC_Order($order_id);
         $amount = $this->sanitize($_POST['Amount']);
