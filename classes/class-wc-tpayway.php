@@ -455,10 +455,10 @@ using PayWay service.', 'tcom-payway-wc'),
                         'reason_code' => $reasonCode,
                         'status' => 'Ok',
                     ),
-                    array('transaction_id' => $this->sanitize($_POST['ShoppingCartID']))
+                    array('transaction_id' => $order_id)
                 );
 
-                $order_note = __('T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc') . $this->sanitize($_POST['ShoppingCartID']);
+                $order_note = __('T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc') . $order_id;
                 $order->add_order_note(esc_html($order_note));
                 $woocommerce->cart->empty_cart();
 
@@ -510,7 +510,7 @@ using PayWay service.', 'tcom-payway-wc'),
                         'reason_code' => 0,
                         'status' => 'Error',
                     ),
-                    array('transaction_id' => $this->sanitize($_POST['ShoppingCartID']))
+                    array('transaction_id' => $order_id)
                 );
 
                 $text = '<html><meta charset="utf-8"><body><center>';
@@ -518,7 +518,7 @@ using PayWay service.', 'tcom-payway-wc'),
                 $text .= __('Reason: ', 'tcom-payway-wc');
                 $text .= $errorCodes . '<br>';
                 $text .= __('Order Id: ', 'tcom-payway-wc');
-                $text .= $this->sanitize($_POST['ShoppingCartID']) . '<br>';
+                $text .= $order_id . '<br>';
                 $text .= __('Redirecting...', 'tcom-payway-wc');
                 $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
 
@@ -547,7 +547,7 @@ using PayWay service.', 'tcom-payway-wc'),
                         'reason_code' => 0,
                         'status' => 'Cancelled',
                     ),
-                    array('transaction_id' => $this->sanitize($_POST['ShoppingCartID']))
+                    array('transaction_id' => $order_id)
                 );
 
                 $text = '<html><meta charset="utf-8"><body><center>';
@@ -555,7 +555,7 @@ using PayWay service.', 'tcom-payway-wc'),
                 $text .= __('Reason: ', 'tcom-payway-wc');
                 $text .= $this->get_response_codes($responseCode) . '<br>';
                 $text .= __('Order Id: ', 'tcom-payway-wc');
-                $text .= $this->sanitize($_POST['ShoppingCartID']) . '<br>';
+                $text .= $order_id . '<br>';
                 $text .= __('Redirecting...', 'tcom-payway-wc');
                 $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
 
