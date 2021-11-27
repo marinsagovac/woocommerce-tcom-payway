@@ -33,7 +33,7 @@ Official T-Com Croatia [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/posl
 
 API 2.0:
 
-* Version [1.5 API 2.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.5.zip) June/2021
+* Version [1.5 API 2.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.5.zip) November/2021
 * Version [1.4 API 2.0](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
 
 Old releases:
