@@ -29,7 +29,6 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
         $this->pg_domain = $this->get_option( 'pg_domain' );
-        $this->response_url_success = $this->get_return_url($_POST['ShoppingCartID']);
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
         $this->woo_active = isset($settings['woo_active']) ? $settings['woo_active'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
@@ -312,7 +311,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'ShoppingCartID' => $pgw_order_id,
             'Version' => $this->version,
             'TotalAmount' => $total_amount_request,
-            'ReturnURL' => $this->response_url_success,
+            'ReturnURL' => $this->get_return_url($order),
             'ReturnErrorURL' => $order->get_cancel_order_url(),
             'CancelURL' => $order->get_cancel_order_url(),
             'Signature' => $pgw_signature,
@@ -485,7 +484,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
                 $order->payment_complete();
 
-                wp_redirect($this->response_url_success, 302);
+                wp_redirect($this->get_return_url($order), 302);
 		exit;
             }
         }
