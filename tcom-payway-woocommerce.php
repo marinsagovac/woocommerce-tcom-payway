@@ -90,15 +90,6 @@ function jal_install_data_tpayway() {
 	$welcome_text = 'Congratulations, you just completed the installation!';
 
 	$table_name = $wpdb->prefix . 'tpayway_ipg';
-
-	$wpdb->insert(
-		$table_name,
-		array(
-			'time' => current_time( 'mysql' ),
-			'name' => $welcome_name,
-			'text' => $welcome_text,
-		)
-	);
 }
 
 register_activation_hook( __FILE__, 'jal_install_tpayway' );

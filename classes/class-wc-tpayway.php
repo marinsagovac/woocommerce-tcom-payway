@@ -29,8 +29,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
         $this->pg_domain = $this->get_option( 'pg_domain' );
-        $this->response_url_success = isset($settings['response_url_success']) ? $settings['response_url_success'] : $this->get_return_url($order);
-        $this->response_url_fail = isset($settings['response_url_fail']) ? $settings['response_url_fail'] : $order->get_cancel_order_url();
+        $this->response_url_success = $this->get_return_url($order);
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
         $this->woo_active = isset($settings['woo_active']) ? $settings['woo_active'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
@@ -97,7 +96,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 'default' => 'prod',
                 'desc_tip' => true,
 		'options' => array(
-			'test'      => __( 'Test Mode', 'woocommerce' ),
+			'test' => __( 'Test Mode', 'woocommerce' ),
 			'prod' => __( 'Prod Mode', 'woocommerce' ),
 		),
             ),
@@ -110,18 +109,6 @@ using PayWay service.', 'tcom-payway-wc'),
             ),
             'acq_id' => array(
                 'title' => __('Secret Key:', $this->domain),
-                'type' => 'text',
-                'description' => '',
-                'default' => '',
-            ),
-            'response_url_success' => array(
-                'title' => __('Response URL success', $this->domain),
-                'type' => 'text',
-                'description' => '',
-                'default' => '',
-            ),
-            'response_url_fail' => array(
-                'title' => __('Response URL fail:', $this->domain),
                 'type' => 'text',
                 'description' => '',
                 'default' => '',
@@ -319,8 +306,8 @@ using PayWay service.', 'tcom-payway-wc'),
             'TotalAmount' => $total_amount_request,
             'Signature' => $pgw_signature,
             'ReturnURL' => $this->response_url_success,
-            'CancelURL' => $this->response_url_fail,
-            'ReturnErrorURL' => $this->response_url_fail,
+            'CancelURL' => $order->get_cancel_order_url(),
+            'ReturnErrorURL' => $order->get_cancel_order_url(),
 
             // Optional fields
             'Lang' => $pgw_language,
@@ -520,7 +507,7 @@ using PayWay service.', 'tcom-payway-wc'),
                 $text .= __('Order Id: ', 'tcom-payway-wc');
                 $text .= $order_id . '<br>';
                 $text .= __('Redirecting...', 'tcom-payway-wc');
-                $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
+                $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $order->get_cancel_order_url() . '"); },3000);</script></body></html>';
 
                 echo $text;
 
