@@ -103,8 +103,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'mer_id' => array(
                 'title' => __('Shop ID:', $this->domain),
                 'type' => 'text',
-                'description' => __('ShopID represents a unique identification of web shop. ShopID is received from PayWay after signing the request for
-using PayWay service.', 'tcom-payway-wc'),
+                'description' => __('ShopID represents a unique identification of web shop. ShopID is received from PayWay after signing the request for using PayWay service.', 'tcom-payway-wc'),
                 'default' => '',
             ),
             'acq_id' => array(
@@ -167,7 +166,7 @@ using PayWay service.', 'tcom-payway-wc'),
             $wpdb->update(
                 $table_name,
                 array(
-                    'response_code' => 0,
+                    'response_code' => '',
                     'response_code_desc' => '',
                     'reason_code' => '',
                     'amount' => $order_total,
@@ -181,12 +180,12 @@ using PayWay service.', 'tcom-payway-wc'),
                 $table_name,
                 array(
                     'transaction_id' => $order_id,
-                    'response_code' => 0,
+                    'response_code' => '',
                     'response_code_desc' => '',
                     'reason_code' => '',
                     'amount' => $order_total,
                     'or_date' => date('Y-m-d'),
-                    'status' => 0,
+                    'status' => '',
                 ),
                 array('%s', '%d')
             );
@@ -325,6 +324,8 @@ using PayWay service.', 'tcom-payway-wc'),
 
             'acq_id' => $this->acq_id, // secret key
             'PurchaseAmt' => $order_format_value,
+            
+            'IntCurrency' => 'EUR',
         );
 
         $form_args_array = array();
@@ -334,7 +335,8 @@ using PayWay service.', 'tcom-payway-wc'),
             $form_args_joins = $key . '=' . $value . '&';
         }
 	    
-	    $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
+	    // $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
+	    $pgDomain = 'https://pgw.ht.hr/services/payment/api/authorize-form';
 	    if ($this->pg_domain == 'test') {
 	    	$pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
 	    }
