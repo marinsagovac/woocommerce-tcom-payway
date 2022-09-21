@@ -29,7 +29,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
         $this->pg_domain = $this->get_option( 'pg_domain' );
-        $this->response_url_success = $this->get_return_url($order);
+        $this->response_url_success = $this->get_return_url($_POST['ShoppingCartID']);
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
         $this->woo_active = isset($settings['woo_active']) ? $settings['woo_active'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
@@ -234,6 +234,15 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             case 'ES':
                 $pgw_language = 'es';
                 break;
+            case 'BG':
+                $pgw_language = 'bg';
+                break;
+            case 'RO':
+                $pgw_language = 'ro';
+                break;
+            case 'EL':
+                $pgw_language = 'el';
+                break;
             default:
                 $pgw_language = 'en';
         }
@@ -303,10 +312,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'ShoppingCartID' => $pgw_order_id,
             'Version' => $this->version,
             'TotalAmount' => $total_amount_request,
-            'Signature' => $pgw_signature,
             'ReturnURL' => $this->response_url_success,
-            'CancelURL' => $order->get_cancel_order_url(),
             'ReturnErrorURL' => $order->get_cancel_order_url(),
+            'CancelURL' => $order->get_cancel_order_url(),
+            'Signature' => $pgw_signature,
 
             // Optional fields
             'Lang' => $pgw_language,
@@ -320,6 +329,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'CustomerEmail' => substr($pgw_email, 0, 254),
             'CustomerPhone' => substr($pgw_telephone, 0, 20),
             // 'PaymentPlan' => 0000, // No payment plan
+            'IntAmount' => $total_amount_request / 7.3450,
             'ReturnMethod' => 'POST',
 
             'acq_id' => $this->acq_id, // secret key
@@ -335,11 +345,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             $form_args_joins = $key . '=' . $value . '&';
         }
 	    
-	    // $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
-	    $pgDomain = 'https://pgw.ht.hr/services/payment/api/authorize-form';
-	    if ($this->pg_domain == 'test') {
-	    	$pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
-	    }
+        $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
+        if ($this->pg_domain == 'test') {
+            $pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
+        }
 
         return '<p></p>
     <p>Total amount will be <b>' . number_format(($order_total)) . ' ' . $curr_symbole . '</b></p>
