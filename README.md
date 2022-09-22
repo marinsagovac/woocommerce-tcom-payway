@@ -4,7 +4,7 @@
 
 ---
 
-![PayWay](assets/images/payway-logo.png|width=100|width=150)
+![PayWay](assets/images/payway-logo.png|width=100)
 
 **Wordpress Woocommerce plugin** (payment gateway for Croatia)
 
