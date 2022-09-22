@@ -18,19 +18,19 @@ Official Croatia Hrvatski Telekom [PayWay](https://www.hrvatskitelekom.hr/poslov
 ## FEATURES
 
 Features
-: IntlCurrency and IntAmount added
-: API 2.0 Support
-: Production and testing API
-: Added other languages with automation language switching on PayWay form
-: PayWay transaction admin page lists
-: WPML support conversion rate
-: Locale support based on WP locale settings (EN/HR)
-: Multilanguage support using po/mo translation
-: Replace banner image of PayWay on checkout with smaller 250px width
+* IntlCurrency and IntAmount added
+* API 2.0 Support
+* Production and testing API
+* Added other languages with automation language switching on PayWay form
+* PayWay transaction admin page lists
+* WPML support conversion rate
+* Locale support based on WP locale settings (EN/HR)
+* Multilanguage support using po/mo translation
+* Replace banner image of PayWay on checkout with smaller 250px width
 
 Removed
-: Removed woo-multi-currency support and integration
-: Removed T-Com names
+* Removed woo-multi-currency support and integration
+* Removed T-Com names
 
 ## RELEASES
 
