@@ -3,11 +3,11 @@
 ![Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png)
 
 ---
-![PayWay](https://raw.githubusercontent.com/marinsagovac/woocommerce-tcom-payway/master/assets/images/payway-logo.png)
-
 **Wordpress Woocommerce plugin** (payment gateway for Croatia)
 
 Support payment gateway for PayWay HT payment gateway.
+
+![PayWay](https://raw.githubusercontent.com/marinsagovac/woocommerce-tcom-payway/master/assets/images/payway-logo.png)
 
 ## API
 
