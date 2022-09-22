@@ -6,6 +6,19 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.6
+
+* IntlCurrency and IntAmount added
+* API 2.0 Support
+* Production and testing API 
+* Removed T-Com brand names
+* Added other languages support
+* Removed Woo Multi Currency Support
+* HNB auto conversion support
+* added gitignore file
+* removed old readme file
+* Replace banner image of PayWay on checkout with smaller 250px width
+
 ### 1.3.3
 
 * fixing minor bugs

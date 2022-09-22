@@ -1,12 +1,12 @@
 <?php
 /*
- * Plugin Name: WooCommerce T-Com PayWay
- * Plugin URI:  https://github.com/Micemade/woocommerce-tcom-payway
- * Description: T-Com PayWay payment gateway
- * Version:     1.3
+ * Plugin Name: WooCommerce PayWay Hrvatski Telekom payment gateway
+ * Plugin URI:  https://github.com/marinsagovac/woocommerce-tcom-payway
+ * Description: WooCommerce PayWay Hrvatski Telekom payment gateway
+ * Version:     1.6
  * Licence:     MIT
  * License URI: https://opensource.org/licenses/MIT
- * Author:      Micemade, Marin Šagovac
+ * Author:      Marin Šagovac
  * Developers:  Marin Šagovac, Matija Kovačević, Danijel Gubić, Ivan Švaljek, Micemade
  * Text Domain: tcom-payway-wc
  */
@@ -27,8 +27,7 @@ if ( ! defined( 'TCOM_PAYWAY_URL' ) ) {
 
 load_plugin_textdomain( 'tcom-payway-wc', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
 
-add_action( 'plugins_loaded', 'woocommerce_tpayway_gateway', 0 );
-
+add_action('plugins_loaded', 'woocommerce_tpayway_gateway', 0);
 function woocommerce_tpayway_gateway() {
 
 	if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
@@ -65,7 +64,7 @@ function jal_install_tpayway() {
 		$charset_collate .= " COLLATE {$wpdb->collate}";
 	}
 
-	$sql = "CREATE TABLE $table_name (
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id int(9) NOT NULL AUTO_INCREMENT,
         transaction_id int(9) NOT NULL,
         response_code int(6) NOT NULL,
@@ -77,25 +76,32 @@ function jal_install_tpayway() {
         UNIQUE KEY id (id)
     ) $charset_collate;";
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	dbDelta( $sql );
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+	dbDelta($sql);
 
 	add_option( 'jal_db_version', $jal_db_version );
 }
+register_activation_hook( __FILE__, 'jal_install_tpayway');
 
 function jal_install_data_tpayway() {
 	global $wpdb;
 
-	$welcome_name = 'T-Com PayWay';
+	$welcome_name = 'PayWay Hrvatski Telekom';
 	$welcome_text = 'Congratulations, you just completed the installation!';
 
 	$table_name = $wpdb->prefix . 'tpayway_ipg';
 }
+register_activation_hook( __FILE__, 'jal_install_data_tpayway');
 
-register_activation_hook( __FILE__, 'jal_install_tpayway' );
-register_activation_hook( __FILE__, 'jal_install_data_tpayway' );
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'jal_add_plugin_page_settings_link');
+function jal_add_plugin_page_settings_link( $links ) {
+    $links[] = '<a href="' .
+        admin_url('admin.php?page=wc-settings&tab=checkout&section=wc_tpayway') .
+        '">' . __('Settings') . '</a>';
+    return $links;
+}
 
-if ( is_admin() ) {
+if (is_admin()) {
 	require_once TCOM_PAYWAY_DIR . 'classes/admin/class-payway-wp-list-table.php';
 	new Payway_Wp_List_Table();
 }

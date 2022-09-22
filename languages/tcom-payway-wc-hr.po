@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce T-Com PayWay\n"
+"Project-Id-Version: WooCommerce Hrvatski Telekom PayWay\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-27 20:52+0000\n"
 "PO-Revision-Date: 2019-11-27 21:17+0000\n"
@@ -34,8 +34,8 @@ msgid "Enable/Disable"
 msgstr "Omogući/Onemogući"
 
 #: classes/class-wc-tpayway.php:63
-msgid "Enable T-Com PayWay Module."
-msgstr "Omogućiti T-Com PayWay modul."
+msgid "Enable Hrvatski Telekom PayWay Module."
+msgstr "Omogući Hrvatski Telekom PayWay modul."
 
 #: classes/class-wc-tpayway.php:67
 msgid "Title:"
@@ -46,8 +46,8 @@ msgid "This controls the title which the user sees during checkout."
 msgstr "Ovo kontrolira naslov koji će kupac koristi prilikom procesa naplate."
 
 #: classes/class-wc-tpayway.php:70
-msgid "T-Com PayWay"
-msgstr "T-Com PayWay"
+msgid "Hrvatski Telekom PayWay"
+msgstr "Hrvatski Telekom PayWay"
 
 #: classes/class-wc-tpayway.php:73
 msgid "Description:"
@@ -59,10 +59,10 @@ msgstr "Ovo kontrolira opis koji će kupac koristiti prilikom procesa naplate."
 
 #: classes/class-wc-tpayway.php:76
 msgid ""
-"T-Com Payway is secure payment gateway in Croatia and you can pay using this "
+"Payway Hrvatski Telekom is secure payment gateway in Croatia and you can pay using this "
 "payment in other currency."
 msgstr ""
-"T-Com PayWay je siguran pristupnik plaćanja u Hrvatskoj u kojem se može "
+"PayWay Hrvatski Telekom je siguran pristupnik plaćanja u Hrvatskoj u kojem se može "
 "izvršiti plaćanja i u drugim valutama."
 
 #: classes/class-wc-tpayway.php:79
@@ -70,8 +70,8 @@ msgid "Authorize URL:"
 msgstr "URL adresa autorizacije"
 
 #: classes/class-wc-tpayway.php:81
-msgid "T-Com PayWay data submiting to this URL"
-msgstr "Podaci T-Com PayWay poslani na ovaj URL"
+msgid "PayWay Hrvatski Telekom data submiting to this URL"
+msgstr "Podaci PayWay Hrvatski Telekom poslani na ovaj URL"
 
 #: classes/class-wc-tpayway.php:82
 msgid "https://pgw.ht.hr/services/payment/api/authorize-form"
@@ -107,17 +107,17 @@ msgstr "Poruka kupcu kod redirekcije na stranicu PayWay"
 
 #. Description of the plugin
 #: classes/class-wc-tpayway.php:119
-msgid "T-Com PayWay payment gateway"
-msgstr "T-Com PayWay pristupnik plaćanja"
+msgid "PayWay Hrvatski Telekom payment gateway"
+msgstr "PayWay Hrvatski Telekom pristupnik plaćanja"
 
 #: classes/class-wc-tpayway.php:120
 msgid ""
-"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">T-Com PayWay</a> is "
-"payment gateway from telecom T-Com who provides payment gateway services as "
+"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">PayWay Hrvatski Telekom</a> is "
+"payment gateway from telecom Hrvatski Telekom who provides payment gateway services as "
 "dedicated services to clients in Croatia."
 msgstr ""
-"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">T-Com PayWay</a> je "
-"pristupnik plaćanja T-Com-a koji omogućava usluge proces naplate kao "
+"<a target=\"_blank\" href=\"http://pgw.t-com.hr/\">PayWay Hrvatski Telekom</a> je "
+"pristupnik plaćanja Hrvatski Telekom koji omogućava usluge proces naplate kao "
 "dedicated usluge klijentima u Hrvatskoj."
 
 #: classes/class-wc-tpayway.php:318
@@ -257,8 +257,8 @@ msgid "Incorrect contact e-mail address (pgw_email)"
 msgstr "Neispravna e-mail adresa (pgw_email)"
 
 #: classes/class-wc-tpayway.php:404
-msgid "T-Com PAYWAY payment successful. Unique Id: "
-msgstr "T-Com PayWay plaćanje uspješno. Jedinstveni ID:"
+msgid "PayWay Hrvatski Telekom payment successful. Unique Id: "
+msgstr "PayWay Hrvatski Telekom plaćanje uspješno. Jedinstveni ID:"
 
 #: classes/class-wc-tpayway.php:409
 msgid "Awaiting payment"
@@ -270,10 +270,10 @@ msgstr "Plaćanje uspješno"
 
 #: classes/class-wc-tpayway.php:418
 msgid ""
-"Payment on T-Com PayWay is successfully completeted and order status is "
+"Payment on PayWay Hrvatski Telekom is successfully completeted and order status is "
 "processed."
 msgstr ""
-"Plaćanje na T-Com PayWayu je uspješno završeno i status narudžbe je "
+"Plaćanje na PayWayu Hrvatski Telekom je uspješno završeno i status narudžbe je "
 "procesiran."
 
 #: classes/class-wc-tpayway.php:425
@@ -298,8 +298,8 @@ msgid "Redirecting..."
 msgstr "Preusmjeravanje ..."
 
 #. Name of the plugin
-msgid "WooCommerce T-Com PayWay"
-msgstr "WooCommerce T-Com PayWay"
+msgid "WooCommerce PayWay Hrvatski Telekom"
+msgstr "WooCommerce PayWay Hrvatski Telekom"
 
 #. URI of the plugin
 msgid "https://github.com/marinsagovac/woocommerce-tcom-payway"

@@ -15,10 +15,13 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->id = 'WC_TPAYWAY';
         $this->domain = 'tcom-payway-wc';
         $this->icon = apply_filters('woocommerce_payway_icon', TCOM_PAYWAY_URL . 'assets/images/payway.png');
-        $this->method_title = 'T-Com PayWay Woocommerce Payment Gateway';
+        $this->method_title = 'PayWay Hrvatski Telekom Woocommerce Payment Gateway';
         $this->has_fields = false;
 
-        $this->version = '2.0';
+        $this->ratehrkfixed = 7.53450;
+        $this->tecajnaHnbApi = "https://api.hnb.hr/tecajn/v2";
+
+        $this->api_version = '2.0';
 
         $this->init_form_fields();
         $this->init_settings();
@@ -30,7 +33,6 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
         $this->pg_domain = $this->get_option( 'pg_domain' );
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
-        $this->woo_active = isset($settings['woo_active']) ? $settings['woo_active'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
 
         $this->msg['message'] = '';
@@ -44,60 +46,44 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
         }
         add_action('woocommerce_receipt_WC_TPAYWAY', array(&$this, 'receipt_page'));
+
+        $this->update_hnb_currency();
     }
 
     function init_form_fields()
     {
-
         include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-
-        if (is_plugin_active('woo-multi-currency/woo-multi-currency.php')) {
-            $woo_active = array(
-                'title' => __('Use Woo Multi Currency conversion', $this->domain),
-                'type' => 'checkbox',
-                'label' => __('Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'tcom-payway-wc'),
-                'default' => 'no',
-            );
-        } else {
-            $woo_active = array(
-                'title' => __('Use Woo Multi Currency conversion', $this->domain),
-                'type' => 'checkbox',
-                'disabled' => true,
-                'label' => __('Enable currency auto conversion for <a href="https://wordpress.org/plugins/woo-multi-currency/">Woo Multi Currency</a> plugin. Make sure that is checked "Allow Multi Currency" in plugin page.', 'tcom-payway-wc'),
-                'default' => 'no',
-            );
-        };
 
         $this->form_fields = array(
             'enabled' => array(
                 'title' => __('Enable/Disable', $this->domain),
                 'type' => 'checkbox',
-                'label' => __('Enable T-Com PayWay Module.', 'tcom-payway-wc'),
+                'label' => __('Enable PayWay Hrvatski Telekom Module.', 'tcom-payway-wc'),
                 'default' => 'no',
             ),
             'title' => array(
                 'title' => __('Title:', $this->domain),
                 'type' => 'text',
                 'description' => __('This controls the title which the user sees during checkout.', 'tcom-payway-wc'),
-                'default' => __('T-Com PayWay', 'tcom-payway-wc'),
+                'default' => __('PayWay Hrvatski Telekom', 'tcom-payway-wc'),
             ),
             'description' => array(
                 'title' => __('Description:', $this->domain),
                 'type' => 'textarea',
                 'description' => __('This controls the description which the user sees during checkout.', 'tcom-payway-wc'),
-                'default' => __('T-Com Payway is secure payment gateway in Croatia and you can pay using this payment in other currency.', 'tcom-payway-wc'),
+                'default' => __('Payway Hrvatski Telekom is secure payment gateway in Croatia and you can pay using this payment in other currency.', 'tcom-payway-wc'),
             ),
             'pg_domain' => array(
                 'title' => __('Authorize URL', $this->domain),
                 'type' => 'select',
                 'class' => 'wc-enhanced-select',
-                'description' => __('T-Com PayWay data submiting to this URL', $this->domain),
+                'description' => __('PayWay Hrvatski Telekom data submitting to this URL. Use Prod Mode to live set.', $this->domain),
                 'default' => 'prod',
                 'desc_tip' => true,
-		'options' => array(
-			'test' => __( 'Test Mode', 'woocommerce' ),
-			'prod' => __( 'Prod Mode', 'woocommerce' ),
-		),
+                'options' => array(
+                    'test' => __( 'Test Mode', 'woocommerce' ),
+                    'prod' => __( 'Prod Mode', 'woocommerce' ),
+                ),
             ),
             'mer_id' => array(
                 'title' => __('Shop ID:', $this->domain),
@@ -107,7 +93,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             ),
             'acq_id' => array(
                 'title' => __('Secret Key:', $this->domain),
-                'type' => 'text',
+                'type' => 'password',
                 'description' => '',
                 'default' => '',
             ),
@@ -115,19 +101,25 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 'title' => __('Message redirect:', $this->domain),
                 'type' => 'textarea',
                 'description' => __('Message to client when redirecting to PayWay page', 'tcom-payway-wc'),
-                'default' => '',
+                'default' => 'Nakon potvrde biti će te preusmjereni na plaćanje.',
             ),
-            'woo_active' => $woo_active,
         );
     }
 
     public function admin_options()
     {
-        echo '<h3>' . __('T-Com PayWay payment gateway', 'tcom-payway-wc') . '</h3>';
-        echo '<p>' . __('<a target="_blank" href="http://pgw.t-com.hr/">T-Com PayWay</a> is payment gateway from telecom T-Com who provides payment gateway services as dedicated services to clients in Croatia.', 'tcom-payway-wc') . '</p>';
+        $hnbRatesUri = "<a href=" . $this->tecajnaHnbApi .">HNB rates</a>";
+
+        echo '<h3>' . __('PayWay Hrvatski Telekom payment gateway', 'tcom-payway-wc') . '</h3>';
+        echo '<p>' . __('<a target="_blank" href="https://www.hrvatskitelekom.hr/poslovni/ict/payway/">PayWay Hrvatski Telekom</a> is payment gateway from telecom Hrvatski Telekom who provides payment gateway services as dedicated services to clients in Croatia.', 'tcom-payway-wc') . '</p>';
         echo '<table class="form-table">';
         $this->generate_settings_html();
         echo '</table>';
+        echo '<p>';
+        echo '<p>' . 'HNB rates fetched: ' . $this->get_last_modified_hnb_file()  . '</p>';
+        echo '<p>Until 12.12.2022. calculation will be fixed between HRK-EUR: 1 HRK = '. $this->ratehrkfixed .'</p>';
+        echo '<p>If you use other curency it can automatically convert from USD (Wordpress) to HRK (PayWay) using ' .$hnbRatesUri . '</p>';
+        echo '</p>';
     }
 
     function payment_fields()
@@ -145,6 +137,81 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         echo $this->generate_ipg_form($order);
         echo '<br>' . $this->checkout_msg . '</b>';
+    }
+
+    private function get_hnb_currency()
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $this->tecajnaHnbApi);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
+
+        $content = curl_exec($ch);
+        if (curl_errno($ch)) {
+            // skip
+        }
+        curl_close($ch);
+
+        return $content;
+    }
+
+    /**
+     *
+     * Store HNB JSON locally
+     *
+     * Save HNB currency JSON not older than 7 days
+     *
+     * @return void
+     */
+    private function update_hnb_currency()
+    {
+        $file = __DIR__ . '/tecajnv2.json';
+
+        if (!file_exists($file)) {
+            file_put_contents($file, $this->get_hnb_currency());
+        } else {
+            clearstatcache();
+            if (filesize($file)) {
+                // If file is older than a day
+                if (time()-filemtime($file) > (24 * 3600)) {
+                    file_put_contents($file, $this->get_hnb_currency());
+                }
+            }
+        }
+    }
+
+    private function get_last_modified_hnb_file()
+    {
+        $file = __DIR__ . '/tecajnv2.json';
+
+        if (file_exists($file)) {
+            return date("d.m.Y H:i:s", filemtime($file));
+        }
+
+        return "HNB rates are not fetched from server.";
+    }
+
+    /**
+     * Retrieve by currency conversion rate
+     *
+     * @return void
+     */
+    private function fetch_hnb_currency($currency) {
+
+        $file = __DIR__ . '/tecajnv2.json';
+        $filecontents = file_get_contents($file);
+
+        $jsonFile = json_decode($filecontents, true);
+
+        foreach ($jsonFile as $val) {
+            if ($val['valuta'] === $currency) {
+                return $val['jedinica'] * $val['srednji_tecaj'];
+            }
+
+        }
+
+        return 1;
     }
 
     public function generate_ipg_form($order_id)
@@ -258,34 +325,39 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         }
 
         $curr_symbole = get_woocommerce_currency();
-        $hrk_rate = apply_filters('jal_pw_currency_rate', false); // filter can be used to input Currency rate for other currencies to HRK
+        $hrk_rate = 1;
         $convert = 'HRK' !== $curr_symbole;
 
-        if (false === $convert && $hrk_rate) {
-            $wcml_settings = get_option('_wcml_settings'); // WooCommerce Multilingual - Multi Currency (WPML plugin)
+        $wcml_settings = get_option('_wcml_settings'); // WooCommerce Multilingual - Multi Currency (WPML plugin)
 
+        // HRK currency
+        if (false === $convert && $hrk_rate) {
             if ($wcml_settings) {
                 $curr_rates = $wcml_settings['currency_options'];
 
                 $hrk_rate = $curr_rates[$curr_symbole]['rate'];
-            } elseif ('yes' === $this->woo_active) {
-                if (isset($_COOKIE['wmc_current_currency'])) { // WooCommerce Multi Currency plugin
-                    $selected_c = get_option('wmc_selected_currencies');
-
-                    if ('HRK' !== $_COOKIE['wmc_current_currency']) {
-                        $hrk_rate = $selected_c[$_COOKIE['wmc_current_currency']]['rate'];
-                    }
-                }
+                $order_total = $woocommerce->cart->total * (1 / $hrk_rate);
             }
-        }
+        } else {
+            // Difference than HRK
 
-        if ($convert && is_numeric($hrk_rate)) {
-            $order_total = $woocommerce->cart->total * (1 / $hrk_rate);
+            // HNB Tecaj
+            if (!$wcml_settings) {
+                if ($curr_symbole === "EUR") {
+                    // Force to 7,3450 until 12.12.2022. fixed rate
+                    $order_total = $woocommerce->cart->total * $this->ratehrkfixed;
+
+                } else {
+                    $order_total = $woocommerce->cart->total * $this->fetch_hnb_currency($curr_symbole);
+                }
+            } else {
+                $order_total = $woocommerce->cart->total;
+            }
         }
 
         $order_format_value = str_pad(($order_total * 100), 12, '0', STR_PAD_LEFT);
         $total_amount = number_format($order_total, 2, '', '');
-	$total_amount_request = number_format($order_total, 2, ',', '');
+	    $total_amount_request = number_format($order_total, 2, ',', '');
 
         $secret_key = $this->acq_id;    // Secret key
 
@@ -309,7 +381,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             // Mandatory fields
             'ShopID' => $pgw_shop_id,
             'ShoppingCartID' => $pgw_order_id,
-            'Version' => $this->version,
+            'Version' => $this->api_version,
             'TotalAmount' => $total_amount_request,
             'ReturnURL' => $this->get_return_url($order),
             'ReturnErrorURL' => $order->get_cancel_order_url(),
@@ -328,12 +400,12 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'CustomerEmail' => substr($pgw_email, 0, 254),
             'CustomerPhone' => substr($pgw_telephone, 0, 20),
             // 'PaymentPlan' => 0000, // No payment plan
-            'IntAmount' => $total_amount_request / 7.3450,
+            'IntAmount' => $total_amount_request / $this->ratehrkfixed,
             'ReturnMethod' => 'POST',
 
             'acq_id' => $this->acq_id, // secret key
             'PurchaseAmt' => $order_format_value,
-            
+
             'IntCurrency' => 'EUR',
         );
 
@@ -343,7 +415,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             $form_args_array[] = "<input type='hidden' name='$key' value='$value'/>";
             $form_args_joins = $key . '=' . $value . '&';
         }
-	    
+
         $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
         if ($this->pg_domain == 'test') {
             $pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
@@ -426,12 +498,12 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         if (!$_POST['ShoppingCartID']) {
                 return;
         }
-        
+
         if (!$_POST['Amount']) {
         	return;
 	}
 	// End installation
-        
+
         $order_id = $_POST['ShoppingCartID'];
 
         $order = new WC_Order($order_id);
@@ -455,7 +527,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                     array('transaction_id' => $order_id)
                 );
 
-                $order_note = __('T-Com PAYWAY payment successful. Unique Id: ', 'tcom-payway-wc') . $order_id;
+                $order_note = __('PayWay Hrvatski Telekom payment successful. Unique Id: ', 'tcom-payway-wc') . $order_id;
                 $order->add_order_note(esc_html($order_note));
                 $woocommerce->cart->empty_cart();
 
@@ -469,7 +541,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 $message = $mailer->wrap_message(
                     __('Payment successful', 'tcom-payway-wc'),
                     sprintf(
-                        __('Payment on T-Com PayWay is successfully completed and order status is processed.', 'tcom-payway-wc'),
+                        __('Payment on PayWay Hrvatski Telekom is successfully completed and order status is processed.', 'tcom-payway-wc'),
                         $order->get_order_number()
                     )
                 );
