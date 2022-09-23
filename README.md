@@ -38,7 +38,7 @@ Removed
 
 API 2.0:
 
-* Version [1.6](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.6.zip) September/2022
+* Version [1.6](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.6.zip) September/2022
 * Version [1.5](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.5.zip) November/2021
 * Version [1.4](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
 
