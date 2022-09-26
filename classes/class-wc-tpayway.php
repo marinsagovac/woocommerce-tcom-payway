@@ -18,6 +18,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->method_title = 'PayWay Hrvatski Telekom Woocommerce Payment Gateway';
         $this->has_fields = false;
 
+        $this->curlExtension = extension_loaded('curl');
+
         $this->ratehrkfixed = 7.53450;
         $this->tecajnaHnbApi = "https://api.hnb.hr/tecajn/v2";
 
@@ -141,6 +143,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
     private function get_hnb_currency()
     {
+        if (!$this->curlExtension) {
+            return "CURL extension is missing. Conversion is disabled.";
+        }
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $this->tecajnaHnbApi);
@@ -184,6 +190,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     private function get_last_modified_hnb_file()
     {
         $file = __DIR__ . '/tecajnv2.json';
+
+        if (!$this->curlExtension) {
+            return "HNB conversion is disabled due of missing CURL extension.";
+        }
 
         if (file_exists($file)) {
             return date("d.m.Y H:i:s", filemtime($file));
@@ -348,7 +358,9 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                     $order_total = $woocommerce->cart->total * $this->ratehrkfixed;
 
                 } else {
-                    $order_total = $woocommerce->cart->total * $this->fetch_hnb_currency($curr_symbole);
+                    if ($this->curlExtension) {
+                        $order_total = $woocommerce->cart->total * $this->fetch_hnb_currency($curr_symbole);
+                    }
                 }
             } else {
                 $order_total = $woocommerce->cart->total;

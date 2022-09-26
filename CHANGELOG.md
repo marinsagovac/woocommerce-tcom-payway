@@ -6,6 +6,10 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.6.1
+
+* Curl module load checks
+
 ### 1.6
 
 * IntlCurrency and IntAmount added
