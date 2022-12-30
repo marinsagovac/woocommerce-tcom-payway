@@ -119,8 +119,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         echo '</table>';
         echo '<p>';
         echo '<p>' . 'HNB rates fetched: ' . $this->get_last_modified_hnb_file()  . '</p>';
-        echo '<p>Until 12.12.2022. calculation will be fixed between HRK-EUR: 1 HRK = '. $this->ratehrkfixed .'</p>';
-        echo '<p>If you use other curency it can automatically convert from USD (Wordpress) to HRK (PayWay) using ' .$hnbRatesUri . '</p>';
+        echo '<p>Preferred currency will be EUR, make sure that default currency on your webshop is set to EUR</p>';
+        echo '<p>Other currency will automatically calculated and sent to PayWay using HNB rates: USD (Wordpress) to HRK (PayWay) using ' .$hnbRatesUri . '</p>';
         echo '</p>';
     }
 
@@ -151,7 +151,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         curl_setopt($ch, CURLOPT_URL, $this->tecajnaHnbApi);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0');
 
         $content = curl_exec($ch);
         if (curl_errno($ch)) {
@@ -325,46 +325,19 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         $pgw_language = strtoupper($pgw_language);
 
-        // $order->order_total = $order->order_total;
-        if ('HR' === $woocommerce->customer->country) {
-            if ('HRK' === $order->get_order_currency()) {
-                $order_total = $order_total;
-            }
-        } else {
-            $order_total = $order_total;
-        }
-
         $curr_symbole = get_woocommerce_currency();
-        $hrk_rate = 1;
-        $convert = 'HRK' !== $curr_symbole;
-
         $wcml_settings = get_option('_wcml_settings'); // WooCommerce Multilingual - Multi Currency (WPML plugin)
 
-        // HRK currency
-        if (false === $convert && $hrk_rate) {
-            if ($wcml_settings) {
-                $curr_rates = $wcml_settings['currency_options'];
-
-                $hrk_rate = $curr_rates[$curr_symbole]['rate'];
-                $order_total = $woocommerce->cart->total * (1 / $hrk_rate);
+        if (!$wcml_settings) {
+            if ($curr_symbole === "EUR") {
+                $order_total = $woocommerce->cart->total;
+            } else {
+                if ($this->curlExtension) {
+                    $order_total = $woocommerce->cart->total * $this->fetch_hnb_currency($curr_symbole);
+                }
             }
         } else {
-            // Difference than HRK
-
-            // HNB Tecaj
-            if (!$wcml_settings) {
-                if ($curr_symbole === "EUR") {
-                    // Force to 7,3450 until 12.12.2022. fixed rate
-                    $order_total = $woocommerce->cart->total * $this->ratehrkfixed;
-
-                } else {
-                    if ($this->curlExtension) {
-                        $order_total = $woocommerce->cart->total * $this->fetch_hnb_currency($curr_symbole);
-                    }
-                }
-            } else {
-                $order_total = $woocommerce->cart->total;
-            }
+            $order_total = $woocommerce->cart->total;
         }
 
         $order_format_value = str_pad(($order_total * 100), 12, '0', STR_PAD_LEFT);
@@ -412,13 +385,16 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'CustomerEmail' => substr($pgw_email, 0, 254),
             'CustomerPhone' => substr($pgw_telephone, 0, 20),
             // 'PaymentPlan' => 0000, // No payment plan
-            'IntAmount' => $total_amount_request / $this->ratehrkfixed,
             'ReturnMethod' => 'POST',
 
             'acq_id' => $this->acq_id, // secret key
             'PurchaseAmt' => $order_format_value,
 
-            'IntCurrency' => 'EUR',
+            'IntCurrency' => 'HRK',
+            'IntAmount' => $total_amount_request * $this->ratehrkfixed,
+
+            // ISO 4217
+            'CurrencyCode' => 978
         );
 
         $form_args_array = array();

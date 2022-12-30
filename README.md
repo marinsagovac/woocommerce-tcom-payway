@@ -11,13 +11,15 @@ Support payment gateway for PayWay HT payment gateway.
 
 ## API
 
-API 2.0 support updated to latest IntlCurrency and IntAmount 
+API 2.x.x support updated to latest IntlCurrency and IntAmount 
 
 Official Croatia Hrvatski Telekom [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/poslovna-rjesenja/web-shop#payway).
 
 ## FEATURES
 
 Features
+* EUR mandatory currency, HRK set as IntAmount from 1.1.2023.
+* Added Currency code 978 and sent mandatory as `CurrencyCode` property [ISO 4217 HR](https://www.six-group.com/en/products-services/financial-information/data-standards.html)
 * IntlCurrency and IntAmount added
 * API 2.0 Support
 * Production and testing API
@@ -31,24 +33,29 @@ Features
 Removed
 * Removed woo-multi-currency support and integration
 * Removed T-Com names
+* Removed HRK to EUR conversion
 
 ## RELEASES
 
 ### OFFICIAL RELEASES
 
-API 2.0:
+Latest version:
 
+* Version [1.7](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.zip) December/2022
+
+API 2.x.x:
+
+* Version [1.7](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.zip) December/2022
 * Version [1.6.1](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.6.1.zip) September/2022
+
+Old releases (not recommended):
+
 * Version [1.5](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.5.zip) November/2021
 * Version [1.4](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
-
-Old releases:
-
 * Version [1.3.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3.3) January/2021
 * Version [1.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2019
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
-
 
 ## INSTALLATION
 
