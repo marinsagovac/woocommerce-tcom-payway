@@ -6,6 +6,16 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.7
+
+Use since 01.01.2023 as EUR mandatory currency:
+
+* EUR as main currency set 1.1.2022., removed unnecessary codes for conversion from HRK to EUR
+* Added Currency code 978 and sent mandatory as `CurrencyCode` property [ISO 4217 HR](https://www.six-group.com/en/products-services/financial-information/data-standards.html)
+* IntCurrency/IntAmount set as HRK currency for informative calculation
+
+> Na svim Vašim shopID-evima će se sa 01.01.2023 od strane PayWay-a automatski postaviti EUR valuta, a na platnoj formi će i dalje biti dvojni prikaz cijena, no sa EUR valutom kao osnovnom i informativnim iznosom u HRK.
+
 ### 1.6.1
 
 * Curl module load checks
