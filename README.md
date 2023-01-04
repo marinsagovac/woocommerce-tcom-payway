@@ -79,3 +79,7 @@ We're continuing to improving, upgrading and fixing our repository using open so
 A source code is an open-sourced and is under [MIT license](http://opensource.org/licenses/MIT) and is possible to change or improve code.
 
 ![Security](assets/images/payway.png)
+
+## TIP
+
+You can buy me a ![kofi](https://ko-fi.com/msagovac#).
