@@ -82,4 +82,4 @@ A source code is an open-sourced and is under [MIT license](http://opensource.or
 
 ## TIP
 
-You can buy me a ![kofi](https://ko-fi.com/msagovac#).
+You can buy me a ![kofi](https://ko-fi.com/msagovac).
