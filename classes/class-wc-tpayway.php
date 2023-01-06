@@ -21,7 +21,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->curlExtension = extension_loaded('curl');
 
         $this->ratehrkfixed = 7.53450;
-        $this->tecajnaHnbApi = "https://api.hnb.hr/tecajn/v2";
+        $this->tecajnaHnbApi = "https://api.hnb.hr/tecajn-eur/v3";
 
         $this->api_version = '2.0';
 
@@ -205,7 +205,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     /**
      * Retrieve by currency conversion rate
      *
-     * @return void
+     * @return array|string|string[]|void
      */
     private function fetch_hnb_currency($currency) {
 
@@ -216,7 +216,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         foreach ($jsonFile as $val) {
             if ($val['valuta'] === $currency) {
-                return $val['jedinica'] * $val['srednji_tecaj'];
+                /** @var float $val */
+                return str_replace(",", ".", $val['srednji_tecaj']);
             }
 
         }
@@ -410,16 +411,16 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         }
 
         return '<p></p>
-    <p>Total amount will be <b>' . number_format(($order_total)) . ' ' . $curr_symbole . '</b></p>
-    <form action="' . $pgDomain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
-        ' . implode('', $form_args_array) . '
-        <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __('Pay via PayWay', 'tcom-payway-wc') . '" />
-            <a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'tcom-payway-wc') . '</a>
-        </form>
-        <!-- autoform submit -->
-        <script type="text/javascript">
-            jQuery("#submit_ipg_payment_form").trigger("click");
-        </script>
+            <p>Total amount will be <b>' . number_format(($order_total)) . ' ' . $curr_symbole . '</b></p>
+            <form action="' . $pgDomain . '" method="post" name="payway-authorize-form" id="payway-authorize-form" type="application/x-www-form-urlencoded">
+                ' . implode('', $form_args_array) . '
+                <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . __('Pay via PayWay', 'tcom-payway-wc') . '" />
+                <a class="button cancel" href="' . $order->get_cancel_order_url() . '">' . __('Cancel order &amp; restore cart', 'tcom-payway-wc') . '</a>
+            </form>
+            <!-- autoform submit -->
+            <script type="text/javascript">
+                jQuery("#submit_ipg_payment_form").trigger("click");
+            </script>
         ';
     }
 

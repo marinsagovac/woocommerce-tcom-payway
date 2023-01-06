@@ -6,6 +6,10 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.7.1
+
+* Change HNB URL tecajna to v3
+
 ### 1.7
 
 Use since 01.01.2023 as EUR mandatory currency:
