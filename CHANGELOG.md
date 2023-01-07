@@ -6,6 +6,10 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.7.2
+
+* Hotfix on on cancelling order will not empty cart
+
 ### 1.7.1
 
 * Change HNB URL tecajna to v3
