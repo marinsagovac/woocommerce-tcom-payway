@@ -41,16 +41,17 @@ Removed
 
 Latest version:
 
-* Version [1.7.1](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.1.zip) January/2023
+* Version [1.7.2](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.2.zip) January/2023
 
 API 2.x.x:
 
+* Version [1.7.2](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.2.zip) January/2023
 * Version [1.7.1](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.1.zip) January/2023
-* Version [1.7](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.zip) December/2022
-* Version [1.6.1](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.6.1.zip) September/2022
 
 Old releases (not recommended):
 
+* Version [1.7](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.zip) December/2022
+* Version [1.6.1](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.6.1.zip) September/2022
 * Version [1.5](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.5.zip) November/2021
 * Version [1.4](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tags/1.4.zip) June/2021
 * Version [1.3.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3.3) January/2021
