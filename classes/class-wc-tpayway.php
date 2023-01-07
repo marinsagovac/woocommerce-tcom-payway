@@ -3,7 +3,7 @@
 /**
  * Class WC_TPAYWAY
  *
- * WC_TPAYWAY with API 2.0
+ * WC_TPAYWAY with API 2.0.9
  */
 class WC_TPAYWAY extends WC_Payment_Gateway
 {
@@ -343,7 +343,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         $order_format_value = str_pad(($order_total * 100), 12, '0', STR_PAD_LEFT);
         $total_amount = number_format($order_total, 2, '', '');
-	    $total_amount_request = number_format($order_total, 2, ',', '');
+        $total_amount_request = number_format($order_total, 2, ',', '');
 
         $secret_key = $this->acq_id;    // Secret key
 
@@ -485,18 +485,19 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         // Return if is error during installation
         if (!$_POST['ShoppingCartID']) {
-                return;
+            return;
         }
 
         if (!$_POST['Amount']) {
-        	return;
-	}
-	// End installation
+            $amount = 0;
+        } else {
+            $amount = $_POST['Amount'];
+        }
 
         $order_id = $_POST['ShoppingCartID'];
 
         $order = new WC_Order($order_id);
-        $amount = $this->sanitize($_POST['Amount']);
+        $amount = $this->sanitize($amount);
         $status = isset($_POST['Success']) ? (int)$_POST['Success'] : 0;
         $reasonCode = isset($_POST['ApprovalCode']) ? (int)$_POST['ApprovalCode'] : 0;
 
@@ -546,11 +547,47 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 $order->payment_complete();
 
                 wp_redirect($this->get_return_url($order), 302);
-		exit;
+                exit;
             }
         }
 
         if (isset($_POST['Success'])) {
+            if (isset($_POST['ResponseCode'])) {
+                $responseCode = (int)$_POST['ResponseCode'];
+                if ($responseCode == 15 || $responseCode == 16) {
+
+                    $order->add_order_note($this->get_response_codes($responseCode) . " (Code $responseCode)");
+                    $order->update_status('cancelled');
+                    $woocommerce->cart->empty_cart();
+
+                    global $wpdb;
+                    $table_name = $wpdb->prefix . 'tpayway_ipg';
+                    $wpdb->update(
+                        $table_name,
+                        array(
+                            'response_code' => $responseCode,
+                            'response_code_desc' => $this->get_response_codes($responseCode),
+                            'reason_code' => 0,
+                            'status' => 0,
+                        ),
+                        array('transaction_id' => $order_id)
+                    );
+
+                    $text = '<html><meta charset="utf-8"><body><center>';
+                    $text .= __('A payment was not cancelled', 'tcom-payway-wc') . '<br>';
+                    $text .= __('Reason: ', 'tcom-payway-wc');
+                    $text .= $this->get_response_codes($responseCode) . '<br>';
+                    $text .= __('Order Id: ', 'tcom-payway-wc');
+                    $text .= $order_id . '<br>';
+                    $text .= __('Redirecting...', 'tcom-payway-wc');
+                    $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
+
+                    echo $text;
+
+                    exit;
+                }
+            }
+
             if ($_POST['Success'] == "0") {
                 $errorCodes = json_encode($_POST['ErrorCodes']);
 
@@ -579,43 +616,6 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 $text .= $order_id . '<br>';
                 $text .= __('Redirecting...', 'tcom-payway-wc');
                 $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $order->get_cancel_order_url() . '"); },3000);</script></body></html>';
-
-                echo $text;
-
-                exit;
-            }
-        }
-
-        // Cancelled
-        if (isset($_POST['ResponseCode'])) {
-            $responseCode = (int)$_POST['ResponseCode'];
-            if ($responseCode == 15 || $responseCode == 16) {
-
-                $order->add_order_note($this->get_response_codes($responseCode) . " (Code $responseCode)");
-                $order->update_status('cancelled');
-                $woocommerce->cart->empty_cart();
-
-                global $wpdb;
-                $table_name = $wpdb->prefix . 'tpayway_ipg';
-                $wpdb->update(
-                    $table_name,
-                    array(
-                        'response_code' => $responseCode,
-                        'response_code_desc' => $this->get_response_codes($responseCode),
-                        'reason_code' => 0,
-                        'status' => 0,
-                    ),
-                    array('transaction_id' => $order_id)
-                );
-
-                $text = '<html><meta charset="utf-8"><body><center>';
-                $text .= __('A payment was not cancelled', 'tcom-payway-wc') . '<br>';
-                $text .= __('Reason: ', 'tcom-payway-wc');
-                $text .= $this->get_response_codes($responseCode) . '<br>';
-                $text .= __('Order Id: ', 'tcom-payway-wc');
-                $text .= $order_id . '<br>';
-                $text .= __('Redirecting...', 'tcom-payway-wc');
-                $text .= '</center><script>setTimeout(function(){ window.location.replace("' . $this->response_url_fail . '"); },3000);</script></body></html>';
 
                 echo $text;
 
