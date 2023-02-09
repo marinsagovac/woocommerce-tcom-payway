@@ -484,7 +484,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         global $woocommerce;
 
         // Return if is error during installation
-        if (!$_POST['ShoppingCartID']) {
+        if (!isset($_POST['ShoppingCartID'])) {
             return;
         }
 
