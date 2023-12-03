@@ -1,6 +1,6 @@
 # Woocommerce HT PayWay
 
-![Woo](https://ps.w.org/woocommerce/assets/banner-1544x500.png)
+![Woo](assets/images/banner-1544x500.png)
 
 ---
 **Wordpress Woocommerce plugin** (payment gateway for Croatia)
