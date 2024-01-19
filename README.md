@@ -42,7 +42,7 @@ Removed
 
 Latest version:
 
-* Version [1.7.4](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.4.zip) January/2024
+* Version [1.8](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.8.zip) January/2024
 
 API 2.x.x:
 
