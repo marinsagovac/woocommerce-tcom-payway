@@ -391,9 +391,6 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'acq_id' => $this->acq_id, // secret key
             'PurchaseAmt' => $order_format_value,
 
-            'IntCurrency' => 'HRK',
-            'IntAmount' => $total_amount_request * $this->ratehrkfixed,
-
             // ISO 4217
             'CurrencyCode' => 978
         );
@@ -484,8 +481,15 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         global $woocommerce;
 
         // Return if is error during installation
+        // Back to homepage
         if (!isset($_POST['ShoppingCartID'])) {
-            return;
+            $text = '<html><meta charset="utf-8"><body><center>';
+            $text .= __('Redirecting...', 'tcom-payway-wc');
+            $text .= '</center><script>setTimeout(function(){ window.location.replace("' . home_url() . '"); },1500);</script></body></html>';
+            
+            echo $text;
+
+            exit;
         }
 
         if (!$_POST['Amount']) {
