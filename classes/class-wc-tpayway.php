@@ -482,15 +482,16 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         // Return if is error during installation
         // Back to homepage
-        if (!isset($_POST['ShoppingCartID'])) {
-            $text = '<html><meta charset="utf-8"><body><center>';
-            $text .= __('Redirecting...', 'tcom-payway-wc');
-            $text .= '</center><script>setTimeout(function(){ window.location.replace("' . home_url() . '"); },1500);</script></body></html>';
+        // commented due of infinite loop
+        //if (!isset($_POST['ShoppingCartID'])) {
+        //    $text = '<html><meta charset="utf-8"><body><center>';
+        //    $text .= __('Redirecting...', 'tcom-payway-wc');
+        //    $text .= '</center><script>setTimeout(function(){ window.location.replace("' . home_url() . '"); },1500);</script></body></html>';
             
-            echo $text;
+        //    echo $text;
 
-            exit;
-        }
+        //    exit;
+        //}
 
         if (!$_POST['Amount']) {
             $amount = 0;
