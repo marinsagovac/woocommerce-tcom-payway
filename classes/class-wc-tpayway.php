@@ -493,13 +493,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         //    exit;
         //}
 
-        if (!$_POST['Amount']) {
-            $amount = 0;
-        } else {
-            $amount = $_POST['Amount'];
-        }
-
-        $order_id = $_POST['ShoppingCartID'];
+        $amount = isset($_POST['Amount']) ? $_POST['Amount'] : 0;
+        $order_id = isset($_POST['ShoppingCartID']) ? $_POST['ShoppingCartID'] : null;
 
         $order = new WC_Order($order_id);
         $amount = $this->sanitize($amount);
