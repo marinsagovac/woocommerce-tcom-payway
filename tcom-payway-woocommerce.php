@@ -11,26 +11,41 @@
  * Text Domain: tcom-payway-wc
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
 // Plugin directory, with trailing slash.
-if ( ! defined( 'TCOM_PAYWAY_DIR' ) ) {
-	define( 'TCOM_PAYWAY_DIR', plugin_dir_path( __FILE__ ) );
+if (! defined('TCOM_PAYWAY_DIR')) {
+	define('TCOM_PAYWAY_DIR', plugin_dir_path(__FILE__));
 }
 
 // Plugin URL, with trailing slash.
-if ( ! defined( 'TCOM_PAYWAY_URL' ) ) {
-	define( 'TCOM_PAYWAY_URL', plugin_dir_url( __FILE__ ) );
+if (! defined('TCOM_PAYWAY_URL')) {
+	define('TCOM_PAYWAY_URL', plugin_dir_url(__FILE__));
 }
 
-load_plugin_textdomain( 'tcom-payway-wc', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
+// Remove or comment out the direct call to load_plugin_textdomain
+// load_plugin_textdomain( 'tcom-payway-wc', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ) );
+
+/**
+ * Load plugin textdomain.
+ */
+function tcom_payway_load_textdomain()
+{
+	load_plugin_textdomain(
+		'tcom-payway-wc', // Textdomain
+		false,            // Deprecated argument, set to false
+		dirname(plugin_basename(__FILE__)) . '/languages/' // Path to language files
+	);
+}
+add_action('init', 'tcom_payway_load_textdomain');
 
 add_action('plugins_loaded', 'woocommerce_tpayway_gateway', 0);
-function woocommerce_tpayway_gateway() {
+function woocommerce_tpayway_gateway()
+{
 
-	if ( ! class_exists( 'WC_Payment_Gateway' ) ) {
+	if (! class_exists('WC_Payment_Gateway')) {
 		return;
 	}
 
@@ -38,29 +53,31 @@ function woocommerce_tpayway_gateway() {
 
 	$wc = new WC_TPAYWAY();
 
-	function woocommerce_add_tpayway_gateway( $methods ) {
+	function woocommerce_add_tpayway_gateway($methods)
+	{
 		$methods[] = 'WC_TPAYWAY';
 		return $methods;
 	}
 
-	add_filter( 'woocommerce_payment_gateways', 'woocommerce_add_tpayway_gateway' );
+	add_filter('woocommerce_payment_gateways', 'woocommerce_add_tpayway_gateway');
 }
 
 global $jal_db_version;
 $jal_db_version = '0.1';
 
-function jal_install_tpayway() {
+function jal_install_tpayway()
+{
 	global $wpdb;
 	global $jal_db_version;
 
 	$table_name      = $wpdb->prefix . 'tpayway_ipg';
 	$charset_collate = '';
 
-	if ( ! empty( $wpdb->charset ) ) {
+	if (! empty($wpdb->charset)) {
 		$charset_collate = "DEFAULT CHARACTER SET {$wpdb->charset}";
 	}
 
-	if ( ! empty( $wpdb->collate ) ) {
+	if (! empty($wpdb->collate)) {
 		$charset_collate .= " COLLATE {$wpdb->collate}";
 	}
 
@@ -79,11 +96,12 @@ function jal_install_tpayway() {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	dbDelta($sql);
 
-	add_option( 'jal_db_version', $jal_db_version );
+	add_option('jal_db_version', $jal_db_version);
 }
-register_activation_hook( __FILE__, 'jal_install_tpayway');
+register_activation_hook(__FILE__, 'jal_install_tpayway');
 
-function jal_install_data_tpayway() {
+function jal_install_data_tpayway()
+{
 	global $wpdb;
 
 	$welcome_name = 'PayWay Hrvatski Telekom';
@@ -91,14 +109,15 @@ function jal_install_data_tpayway() {
 
 	$table_name = $wpdb->prefix . 'tpayway_ipg';
 }
-register_activation_hook( __FILE__, 'jal_install_data_tpayway');
+register_activation_hook(__FILE__, 'jal_install_data_tpayway');
 
-add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'jal_add_plugin_page_settings_link');
-function jal_add_plugin_page_settings_link( $links ) {
-    $links[] = '<a href="' .
-        admin_url('admin.php?page=wc-settings&tab=checkout&section=wc_tpayway') .
-        '">' . __('Settings') . '</a>';
-    return $links;
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'jal_add_plugin_page_settings_link');
+function jal_add_plugin_page_settings_link($links)
+{
+	$links[] = '<a href="' .
+		admin_url('admin.php?page=wc-settings&tab=checkout&section=wc_tpayway') .
+		'">' . __('Settings', 'tcom-payway-wc') . '</a>';
+	return $links;
 }
 
 if (is_admin()) {
