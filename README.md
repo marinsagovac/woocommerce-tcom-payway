@@ -43,7 +43,7 @@ Removed
 
 Latest version:
 
-* Version [1.8.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.3) November/2024
+* Version [1.8.4](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.4) November/2024
 
 API 2.x.x:
 
