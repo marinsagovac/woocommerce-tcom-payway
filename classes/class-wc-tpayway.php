@@ -11,24 +11,23 @@ class WC_TPAYWAY extends WC_Payment_Gateway
      * WC_TPAYWAY constructor.
      */
 
-    private $id;
-    private $domain;
-    private $icon;
-    private $method_title;
-    private $has_fields;
-    private $curlExtension;
-    private $ratehrkfixed;
-    private $tecajnaHnbApi;
-    private $api_version;
-    private $title;
-    private $settings;
-    private $shop_id;
-    private $acq_id;
-    private $pg_domain;
-    private $checkout_msg;
-    private $description;
-    private $msg;
-
+    public $id;
+    public $domain;
+    public $icon;
+    public $method_title;
+    public $has_fields;
+    public $curlExtension;
+    public $ratehrkfixed;
+    public $tecajnaHnbApi;
+    public $api_version;
+    public $title;
+    public $settings;
+    public $shop_id;
+    public $acq_id;
+    public $pg_domain;
+    public $checkout_msg;
+    public $description;
+    public $msg;
 
     public function __construct()
     {
