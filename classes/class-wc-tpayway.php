@@ -28,8 +28,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     public $checkout_msg;
     public $description;
     public $msg;
-
-
+  
     public function __construct()
     {
 
