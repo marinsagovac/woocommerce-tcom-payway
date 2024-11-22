@@ -10,8 +10,29 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     /**
      * WC_TPAYWAY constructor.
      */
+
+    private $id;
+    private $domain;
+    private $icon;
+    private $method_title;
+    private $has_fields;
+    private $curlExtension;
+    private $ratehrkfixed;
+    private $tecajnaHnbApi;
+    private $api_version;
+    private $title;
+    private $settings;
+    private $shop_id;
+    private $acq_id;
+    private $pg_domain;
+    private $checkout_msg;
+    private $description;
+    private $msg;
+
+
     public function __construct()
     {
+
         $this->id = 'WC_TPAYWAY';
         $this->domain = 'tcom-payway-wc';
         $this->icon = apply_filters('woocommerce_payway_icon', TCOM_PAYWAY_URL . 'assets/images/payway.png');
@@ -33,7 +54,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $this->title = isset($settings['title']) ? $settings['title'] : '';
         $this->shop_id = isset($settings['mer_id']) ? $settings['mer_id'] : '';
         $this->acq_id = isset($settings['acq_id']) ? $settings['acq_id'] : '';
-        $this->pg_domain = $this->get_option( 'pg_domain' );
+        $this->pg_domain = $this->get_option('pg_domain');
         $this->checkout_msg = isset($settings['checkout_msg']) ? $settings['checkout_msg'] : '';
         $this->description = isset($settings['description']) ? $settings['description'] : '';
 
@@ -83,8 +104,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 'default' => 'prod',
                 'desc_tip' => true,
                 'options' => array(
-                    'test' => __( 'Test Mode', 'woocommerce' ),
-                    'prod' => __( 'Prod Mode', 'woocommerce' ),
+                    'test' => __('Test Mode', 'woocommerce'),
+                    'prod' => __('Prod Mode', 'woocommerce'),
                 ),
             ),
             'mer_id' => array(
@@ -110,7 +131,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
     public function admin_options()
     {
-        $hnbRatesUri = "<a href=" . $this->tecajnaHnbApi .">HNB rates</a>";
+        $hnbRatesUri = "<a href=" . $this->tecajnaHnbApi . ">HNB rates</a>";
 
         echo '<h3>' . __('PayWay Hrvatski Telekom payment gateway', 'tcom-payway-wc') . '</h3>';
         echo '<p>' . __('<a target="_blank" href="https://www.hrvatskitelekom.hr/poslovni/ict/payway/">PayWay Hrvatski Telekom</a> is payment gateway from telecom Hrvatski Telekom who provides payment gateway services as dedicated services to clients in Croatia.', 'tcom-payway-wc') . '</p>';
@@ -120,7 +141,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         echo '<p>';
         echo '<p>' . 'HNB rates fetched: ' . $this->get_last_modified_hnb_file()  . '</p>';
         echo '<p>Preferred currency will be EUR, make sure that default currency on your webshop is set to EUR</p>';
-        echo '<p>Other currency will automatically calculated and sent to PayWay using HNB rates: USD (Wordpress) to HRK (PayWay) using ' .$hnbRatesUri . '</p>';
+        echo '<p>Other currency will automatically calculated and sent to PayWay using HNB rates: USD (Wordpress) to HRK (PayWay) using ' . $hnbRatesUri . '</p>';
         echo '</p>';
     }
 
@@ -180,7 +201,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             clearstatcache();
             if (filesize($file)) {
                 // If file is older than a day
-                if (time()-filemtime($file) > (24 * 3600)) {
+                if (time() - filemtime($file) > (24 * 3600)) {
                     file_put_contents($file, $this->get_hnb_currency());
                 }
             }
@@ -207,7 +228,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
      *
      * @return array|string|string[]|void
      */
-    private function fetch_hnb_currency($currency) {
+    private function fetch_hnb_currency($currency)
+    {
 
         $file = __DIR__ . '/tecajnv2.json';
         $filecontents = file_get_contents($file);
@@ -219,7 +241,6 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 /** @var float $val */
                 return str_replace(",", ".", $val['srednji_tecaj']);
             }
-
         }
 
         return 1;
@@ -487,7 +508,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         //    $text = '<html><meta charset="utf-8"><body><center>';
         //    $text .= __('Redirecting...', 'tcom-payway-wc');
         //    $text .= '</center><script>setTimeout(function(){ window.location.replace("' . home_url() . '"); },1500);</script></body></html>';
-            
+
         //    echo $text;
 
         //    exit;
