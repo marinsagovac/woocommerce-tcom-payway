@@ -30,6 +30,7 @@ Features
 * Multilanguage support using po/mo translation
 * Replace banner image of PayWay on checkout with smaller 250px width
 * Not needle IntAmount and IntCurrency from 1.1.2024.
+* Support PHP 8.x
 
 Removed
 * Removed woo-multi-currency support and integration
@@ -42,10 +43,11 @@ Removed
 
 Latest version:
 
-* Version [1.8.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.1) February/2024
+* Version [1.8.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.3) November/2024
 
 API 2.x.x:
 
+* Version [1.8.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.3) November/2024
 * Version [1.8.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.8.1) February/2024
 * Version [1.7.3](https://github.com/marinsagovac/woocommerce-tcom-payway/archive/refs/tags/1.7.3.zip) January/2023
 

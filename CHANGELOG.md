@@ -6,6 +6,16 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.8.3
+
+* Cleanup a code
+* Support for PHP 8.2/8.3
+* Added property missing in class
+
+### 1.8.2
+
+* Fix isset issue when value is 0 or is not Amount
+
 ### 1.7.2
 
 * Hotfix on on cancelling order will not empty cart
