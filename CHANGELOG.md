@@ -6,6 +6,10 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.8.5
+
+* fix redirection of t-com payway
+
 ### 1.8.3
 
 * Cleanup a code

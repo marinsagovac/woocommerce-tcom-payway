@@ -423,9 +423,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
+
         return array(
             'result'   => 'success',
-            'redirect' => $order->get_checkout_payment_url(),
+            'redirect' => $order->get_checkout_payment_url(true),
         );
     }
 
