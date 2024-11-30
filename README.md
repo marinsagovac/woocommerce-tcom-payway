@@ -15,6 +15,8 @@ API 2.x.x support updated to latest IntlCurrency and IntAmount
 
 Official Croatia Hrvatski Telekom [PayWay](https://www.hrvatskitelekom.hr/poslovni/ict/poslovna-rjesenja/web-shop#payway).
 
+PayWayForm Documentation revision supported: 7.1.10
+
 ## FEATURES
 
 Features
