@@ -381,6 +381,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         return '<p></p>
             <p>Total amount will be <b>' . esc_html(number_format($order_total, 2)) . ' ' . esc_html($currency_symbol) . '</b></p>
+            
             <form action="' . esc_url($pgDomain) . '" method="post" name="payway-authorize-form" id="payway-authorize-form" enctype="application/x-www-form-urlencoded">
                 ' . implode('', $form_args_array) . '
                 <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . esc_attr__('Pay via PayWay', 'tcom-payway-wc') . '" />
