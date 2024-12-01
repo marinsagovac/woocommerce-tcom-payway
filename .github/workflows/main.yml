@@ -26,12 +26,6 @@ jobs:
           curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
           chmod +x phpcs.phar
           sudo mv phpcs.phar /usr/local/bin/phpcs
-      
-      - name: Install WordPress Coding Standards
-        run: |
-          git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git /tmp/wpcs
-          phpcs --config-set installed_paths /tmp/wpcs
-          phpcs --config-set default_standard WordPress
 
   test:
     name: Run Tests
