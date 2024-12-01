@@ -1,0 +1,63 @@
+name: WordPress Plugin CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # Change to your supported PHP version
+          extensions: mbstring, zip
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install --no-dev
+
+      - name: Run Coding Standards
+        run: |
+          composer install --dev
+          ./vendor/bin/phpcs --standard=WordPress --ignore=vendor/ ./
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, zip
+          coverage: xdebug
+
+      - name: Install Dependencies
+        run: composer install --dev
+
+      - name: Setup WordPress
+        run: |
+          curl -o /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz
+          tar -xzf /tmp/wordpress.tar.gz -C /tmp/
+          mv /tmp/wordpress /tmp/wordpress-latest
+
+      - name: Run PHPUnit Tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-latest
+        run: ./vendor/bin/phpunit
