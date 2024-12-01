@@ -261,7 +261,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         global $wpdb;
 
         $order = wc_get_order($order_id);
-        $productinfo = "Order $order_id";
+        // $productinfo = "Order $order_id";
 
         $currency_symbol = get_woocommerce_currency();
         $order_total    = $order->get_total();
@@ -396,28 +396,11 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     private function determine_language($country_code)
     {
         $languages = array(
-            'HR' => 'hr',
-            'SR' => 'sr',
-            'SL' => 'sl',
-            'BS' => 'bs',
-            'CG' => 'cg',
-            'DE' => 'de',
-            'IT' => 'it',
-            'FR' => 'fr',
-            'NL' => 'nl',
-            'HU' => 'hu',
-            'RU' => 'ru',
-            'SK' => 'sk',
-            'CZ' => 'cz',
-            'PL' => 'pl',
-            'PT' => 'pt',
-            'ES' => 'es',
-            'BG' => 'bg',
-            'RO' => 'ro',
-            'EL' => 'el',
+            'HR', 'SR', 'SL', 'BS', 'CG', 'DE', 'IT', 'FR', 'NL', 'HU',
+            'RU', 'SK', 'CZ', 'PL', 'PT', 'ES', 'BG', 'RO', 'EL',
         );
 
-        return isset($languages[$country_code]) ? $languages[$country_code] : 'en';
+        return in_array($country_code, $languages) ? strtolower($country_code) : 'en';
     }
 
     public function process_payment($order_id)
@@ -478,8 +461,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
     function check_tcompayway_response()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                return;
+            }
         }
 
         if (!isset($_POST['ShoppingCartID'])) {

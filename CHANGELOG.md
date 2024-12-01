@@ -6,6 +6,11 @@ Most recent latest changes is defined on every major, minor and bug fixes.
 
 ## Versions
 
+### 1.8.6
+
+* bugfixing on undefined $_SERVER request method REQUEST_METHOD to clear logs
+* simply determine language code determine_language() function
+
 ### 1.8.5
 
 * fix redirection of t-com payway
