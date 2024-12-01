@@ -92,6 +92,11 @@ A source code is an open-sourced and is under [MIT license](http://opensource.or
 
 ![Security](assets/images/payway.png)
 
+## DEPRECATED DOCUMENTATIONS
+
+Under wiki are screenshots of settings and admin preview of payments: [here](https://github.com/marinsagovac/woocommerce-tcom-payway/wiki/Deprecated-docs)
+`docs` folder has been removed from 1.8.7 version.
+
 ## TIP
 
 You can buy me a coffe https://ko-fi.com/msagovac.
