@@ -54,7 +54,7 @@ jobs:
           # List the artifacts the provenance will refer to.
           files=$(ls artifact*)
           # Generate the subjects (base64 encoded).
-          echo "::set-output name=digests::$(sha256sum $files | base64 -w0)"
+          echo "digests=$(sha256sum $files | base64 -w0)" >> $GITHUB_OUTPUT
 
   provenance:
     needs: [build]
