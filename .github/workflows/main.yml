@@ -1,12 +1,9 @@
 name: WordPress Plugin CI/CD
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+  release:
+    types: [created]
 
 jobs:
   setup:
