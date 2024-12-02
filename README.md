@@ -1,4 +1,4 @@
-# Woocommerce HT PayWay
+# PayWay Hrvatski Telekom payment gateway for WooCommerce
 
 [![build-test](https://github.com/marinsagovac/woocommerce-tcom-payway/actions/workflows/wordpress-plugin-check.yml/badge.svg?branch=master)](https://github.com/marinsagovac/woocommerce-tcom-payway/actions/workflows/wordpress-plugin-check.yml)
 
@@ -68,6 +68,10 @@ Old releases (deprecated):
 * Version [1.3](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.3) December/2019
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
+
+## Tested up to
+
+Tested up to: **6.7.1**
 
 ## INSTALLATION
 
