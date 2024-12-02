@@ -161,7 +161,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         echo '<p>';
         echo '<p>' . esc_html__('HNB rates fetched: ', 'woocommerce-tcom-payway') . esc_html($this->get_last_modified_hnb_file()) . '</p>';
         echo '<p>' . esc_html__('Preferred currency will be EUR. Make sure that the default currency on your webshop is set to EUR.', 'woocommerce-tcom-payway') . '</p>';
-        echo '<p>' . esc_html__('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'woocommerce-tcom-payway') . $hnbRatesUri . '</p>';
+        echo '<p>' . esc_html__('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'woocommerce-tcom-payway') . esc_url($hnbRatesUri) . '</p>';
         echo '</p>';
     }
 
@@ -606,4 +606,3 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         );
     }
 }
-    
