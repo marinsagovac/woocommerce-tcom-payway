@@ -38,6 +38,7 @@ function tcom_payway_load_textdomain()
 add_action('init', 'tcom_payway_load_textdomain');
 
 add_action('plugins_loaded', 'woocommerce_tpayway_gateway', 0);
+
 function woocommerce_tpayway_gateway()
 {
 	if (!class_exists('WC_Payment_Gateway')) {
