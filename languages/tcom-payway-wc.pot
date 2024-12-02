@@ -288,7 +288,7 @@ msgid "Redirecting..."
 msgstr ""
 
 #. Name of the plugin
-msgid "WooCommerce PayWay Hrvatski Telekom"
+msgid "PayWay Hrvatski Telekom payment gateway for WooCommerce"
 msgstr ""
 
 #. URI of the plugin
