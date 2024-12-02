@@ -28,12 +28,12 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     public $checkout_msg;
     public $description;
     public $msg;
-  
+
     public function __construct()
     {
 
         $this->id = 'WC_TPAYWAY';
-        $this->domain = 'tcom-payway-wc';
+        $this->domain = 'woocommerce-tcom-payway';
         $this->icon = apply_filters('woocommerce_payway_icon', TCOM_PAYWAY_URL . 'assets/images/payway.png');
         $this->method_title = 'PayWay Hrvatski Telekom Woocommerce Payment Gateway';
         $this->has_fields = false;
@@ -81,7 +81,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     public function load_textdomain()
     {
         load_plugin_textdomain(
-            'tcom-payway-wc', // Textdomain
+            'woocommerce-tcom-payway', // Textdomain
             false,            // Deprecated argument, set to false
             dirname(plugin_basename(__FILE__)) . '/languages/' // Path to language files
         );
@@ -96,20 +96,20 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'enabled' => array(
                 'title'       => __('Enable/Disable', $this->domain),
                 'type'        => 'checkbox',
-                'label'       => __('Enable PayWay Hrvatski Telekom Module.', 'tcom-payway-wc'),
+                'label'       => __('Enable PayWay Hrvatski Telekom Module.', 'woocommerce-tcom-payway'),
                 'default'     => 'no',
             ),
             'title' => array(
                 'title'       => __('Title:', $this->domain),
                 'type'        => 'text',
-                'description' => __('This controls the title which the user sees during checkout.', 'tcom-payway-wc'),
-                'default'     => __('PayWay Hrvatski Telekom', 'tcom-payway-wc'),
+                'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-tcom-payway'),
+                'default'     => __('PayWay Hrvatski Telekom', 'woocommerce-tcom-payway'),
             ),
             'description' => array(
                 'title'       => __('Description:', $this->domain),
                 'type'        => 'textarea',
-                'description' => __('This controls the description which the user sees during checkout.', 'tcom-payway-wc'),
-                'default'     => __('Payway Hrvatski Telekom is a secure payment gateway in Croatia and you can pay using this payment in other currencies.', 'tcom-payway-wc'),
+                'description' => __('This controls the description which the user sees during checkout.', 'woocommerce-tcom-payway'),
+                'default'     => __('Payway Hrvatski Telekom is a secure payment gateway in Croatia and you can pay using this payment in other currencies.', 'woocommerce-tcom-payway'),
             ),
             'pg_domain' => array(
                 'title'       => __('Authorize URL', $this->domain),
@@ -126,7 +126,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'mer_id' => array(
                 'title'       => __('Shop ID:', $this->domain),
                 'type'        => 'text',
-                'description' => __('ShopID represents a unique identification of the web shop. ShopID is received from PayWay after signing the request for using PayWay service.', 'tcom-payway-wc'),
+                'description' => __('ShopID represents a unique identification of the web shop. ShopID is received from PayWay after signing the request for using PayWay service.', 'woocommerce-tcom-payway'),
                 'default'     => '',
             ),
             'acq_id' => array(
@@ -138,7 +138,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             'checkout_msg' => array(
                 'title'       => __('Message redirect:', $this->domain),
                 'type'        => 'textarea',
-                'description' => __('Message to client when redirecting to PayWay page', 'tcom-payway-wc'),
+                'description' => __('Message to client when redirecting to PayWay page', 'woocommerce-tcom-payway'),
                 'default'     => 'Nakon potvrde biti ćete preusmjereni na plaćanje.',
             ),
         );
@@ -149,15 +149,15 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     {
         $hnbRatesUri = "<a href=\"" . esc_url($this->tecajnaHnbApi) . "\">HNB rates</a>";
 
-        echo '<h3>' . __('PayWay Hrvatski Telekom payment gateway', 'tcom-payway-wc') . '</h3>';
-        echo '<p>' . __('<a target="_blank" href="https://www.hrvatskitelekom.hr/poslovni/ict/payway/">PayWay Hrvatski Telekom</a> is a payment gateway from Hrvatski Telekom that provides payment gateway services as dedicated services to clients in Croatia.', 'tcom-payway-wc') . '</p>';
+        echo '<h3>' . __('PayWay Hrvatski Telekom payment gateway', 'woocommerce-tcom-payway') . '</h3>';
+        echo '<p>' . __('<a target="_blank" href="https://www.hrvatskitelekom.hr/poslovni/ict/payway/">PayWay Hrvatski Telekom</a> is a payment gateway from Hrvatski Telekom that provides payment gateway services as dedicated services to clients in Croatia.', 'woocommerce-tcom-payway') . '</p>';
         echo '<table class="form-table">';
         $this->generate_settings_html();
         echo '</table>';
         echo '<p>';
-        echo '<p>' . __('HNB rates fetched: ', 'tcom-payway-wc') . $this->get_last_modified_hnb_file() . '</p>';
-        echo '<p>' . esc_html__( 'Preferred currency will be EUR. Make sure that the default currency on your webshop is set to EUR.', 'tcom-payway-wc' ) . '</p>';
-        echo '<p>' . __('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'tcom-payway-wc') . $hnbRatesUri . '</p>';
+        echo '<p>' . __('HNB rates fetched: ', 'woocommerce-tcom-payway') . $this->get_last_modified_hnb_file() . '</p>';
+        echo '<p>' . esc_html__('Preferred currency will be EUR. Make sure that the default currency on your webshop is set to EUR.', 'woocommerce-tcom-payway') . '</p>';
+        echo '<p>' . __('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'woocommerce-tcom-payway') . $hnbRatesUri . '</p>';
         echo '</p>';
     }
 
@@ -384,8 +384,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             
             <form action="' . esc_url($pgDomain) . '" method="post" name="payway-authorize-form" id="payway-authorize-form" enctype="application/x-www-form-urlencoded">
                 ' . implode('', $form_args_array) . '
-                <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . esc_attr__('Pay via PayWay', 'tcom-payway-wc') . '" />
-                <a class="button cancel" href="' . esc_url($order->get_cancel_order_url()) . '">' . esc_html__('Cancel order &amp; restore cart', 'tcom-payway-wc') . '</a>
+                <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . esc_attr__('Pay via PayWay', 'woocommerce-tcom-payway') . '" />
+                <a class="button cancel" href="' . esc_url($order->get_cancel_order_url()) . '">' . esc_html__('Cancel order &amp; restore cart', 'woocommerce-tcom-payway') . '</a>
             </form>
             <!-- autoform submit -->
             <script type="text/javascript">
@@ -397,8 +397,25 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     private function determine_language($country_code)
     {
         $languages = array(
-            'HR', 'SR', 'SL', 'BS', 'CG', 'DE', 'IT', 'FR', 'NL', 'HU',
-            'RU', 'SK', 'CZ', 'PL', 'PT', 'ES', 'BG', 'RO', 'EL',
+            'HR',
+            'SR',
+            'SL',
+            'BS',
+            'CG',
+            'DE',
+            'IT',
+            'FR',
+            'NL',
+            'HU',
+            'RU',
+            'SK',
+            'CZ',
+            'PL',
+            'PT',
+            'ES',
+            'BG',
+            'RO',
+            'EL',
         );
 
         return in_array($country_code, $languages) ? strtolower($country_code) : 'en';
@@ -419,45 +436,45 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         $id = (int)$id;
 
         $res = array(
-            0    => __('Action successful', 'tcom-payway-wc'),
-            15   => __('User cancelled the transaction by himself', 'tcom-payway-wc'),
-            16   => __('Transaction cancelled due to timeout', 'tcom-payway-wc'),
+            0    => __('Action successful', 'woocommerce-tcom-payway'),
+            15   => __('User cancelled the transaction by himself', 'woocommerce-tcom-payway'),
+            16   => __('Transaction cancelled due to timeout', 'woocommerce-tcom-payway'),
 
             // Deprecated, refactoring
-            1    => __('Action unsuccessful', 'tcom-payway-wc'),
-            2    => __('Error processing', 'tcom-payway-wc'),
-            3    => __('Action cancelled', 'tcom-payway-wc'),
-            4    => __('Action unsuccessful (3D Secure MPI)', 'tcom-payway-wc'),
-            1000 => __('Incorrect signature (pgw_signature)', 'tcom-payway-wc'),
-            1001 => __('Incorrect store ID (pgw_shop_id)', 'tcom-payway-wc'),
-            1002 => __('Incorrect transaction ID (pgw_transaction_id)', 'tcom-payway-wc'),
-            1003 => __('Incorrect amount (pgw_amount)', 'tcom-payway-wc'),
-            1004 => __('Incorrect authorization_type (pgw_authorization_type)', 'tcom-payway-wc'),
-            1005 => __('Incorrect announcement duration (pgw_announcement_duration)', 'tcom-payway-wc'),
-            1006 => __('Incorrect installments number (pgw_installments)', 'tcom-payway-wc'),
-            1007 => __('Incorrect language (pgw_language)', 'tcom-payway-wc'),
-            1008 => __('Incorrect authorization token (pgw_authorization_token)', 'tcom-payway-wc'),
-            1100 => __('Incorrect card number (pgw_card_number)', 'tcom-payway-wc'),
-            1101 => __('Incorrect card expiration date (pgw_card_expiration_date)', 'tcom-payway-wc'),
-            1102 => __('Incorrect card verification data (pgw_card_verification_data)', 'tcom-payway-wc'),
-            1200 => __('Incorrect order ID (pgw_order_id)', 'tcom-payway-wc'),
-            1201 => __('Incorrect order info (pgw_order_info)', 'tcom-payway-wc'),
-            1202 => __('Incorrect order items (pgw_order_items)', 'tcom-payway-wc'),
-            1300 => __('Incorrect return method (pgw_return_method)', 'tcom-payway-wc'),
-            1301 => __('Incorrect success store url (pgw_success_url)', 'tcom-payway-wc'),
-            1302 => __('Incorrect error store url (pgw_failure_url)', 'tcom-payway-wc'),
-            1304 => __('Incorrect merchant data (pgw_merchant_data)', 'tcom-payway-wc'),
-            1400 => __('Incorrect buyer\'s name (pgw_first_name)', 'tcom-payway-wc'),
-            1401 => __('Incorrect buyer\'s last name (pgw_last_name)', 'tcom-payway-wc'),
-            1402 => __('Incorrect address (pgw_street)', 'tcom-payway-wc'),
-            1403 => __('Incorrect city (pgw_city)', 'tcom-payway-wc'),
-            1404 => __('Incorrect ZIP code (pgw_post_code)', 'tcom-payway-wc'),
-            1405 => __('Incorrect country (pgw_country)', 'tcom-payway-wc'),
-            1406 => __('Incorrect contact phone (pgw_telephone)', 'tcom-payway-wc'),
-            1407 => __('Incorrect contact e-mail address (pgw_email)', 'tcom-payway-wc'),
+            1    => __('Action unsuccessful', 'woocommerce-tcom-payway'),
+            2    => __('Error processing', 'woocommerce-tcom-payway'),
+            3    => __('Action cancelled', 'woocommerce-tcom-payway'),
+            4    => __('Action unsuccessful (3D Secure MPI)', 'woocommerce-tcom-payway'),
+            1000 => __('Incorrect signature (pgw_signature)', 'woocommerce-tcom-payway'),
+            1001 => __('Incorrect store ID (pgw_shop_id)', 'woocommerce-tcom-payway'),
+            1002 => __('Incorrect transaction ID (pgw_transaction_id)', 'woocommerce-tcom-payway'),
+            1003 => __('Incorrect amount (pgw_amount)', 'woocommerce-tcom-payway'),
+            1004 => __('Incorrect authorization_type (pgw_authorization_type)', 'woocommerce-tcom-payway'),
+            1005 => __('Incorrect announcement duration (pgw_announcement_duration)', 'woocommerce-tcom-payway'),
+            1006 => __('Incorrect installments number (pgw_installments)', 'woocommerce-tcom-payway'),
+            1007 => __('Incorrect language (pgw_language)', 'woocommerce-tcom-payway'),
+            1008 => __('Incorrect authorization token (pgw_authorization_token)', 'woocommerce-tcom-payway'),
+            1100 => __('Incorrect card number (pgw_card_number)', 'woocommerce-tcom-payway'),
+            1101 => __('Incorrect card expiration date (pgw_card_expiration_date)', 'woocommerce-tcom-payway'),
+            1102 => __('Incorrect card verification data (pgw_card_verification_data)', 'woocommerce-tcom-payway'),
+            1200 => __('Incorrect order ID (pgw_order_id)', 'woocommerce-tcom-payway'),
+            1201 => __('Incorrect order info (pgw_order_info)', 'woocommerce-tcom-payway'),
+            1202 => __('Incorrect order items (pgw_order_items)', 'woocommerce-tcom-payway'),
+            1300 => __('Incorrect return method (pgw_return_method)', 'woocommerce-tcom-payway'),
+            1301 => __('Incorrect success store url (pgw_success_url)', 'woocommerce-tcom-payway'),
+            1302 => __('Incorrect error store url (pgw_failure_url)', 'woocommerce-tcom-payway'),
+            1304 => __('Incorrect merchant data (pgw_merchant_data)', 'woocommerce-tcom-payway'),
+            1400 => __('Incorrect buyer\'s name (pgw_first_name)', 'woocommerce-tcom-payway'),
+            1401 => __('Incorrect buyer\'s last name (pgw_last_name)', 'woocommerce-tcom-payway'),
+            1402 => __('Incorrect address (pgw_street)', 'woocommerce-tcom-payway'),
+            1403 => __('Incorrect city (pgw_city)', 'woocommerce-tcom-payway'),
+            1404 => __('Incorrect ZIP code (pgw_post_code)', 'woocommerce-tcom-payway'),
+            1405 => __('Incorrect country (pgw_country)', 'woocommerce-tcom-payway'),
+            1406 => __('Incorrect contact phone (pgw_telephone)', 'woocommerce-tcom-payway'),
+            1407 => __('Incorrect contact e-mail address (pgw_email)', 'woocommerce-tcom-payway'),
         );
 
-        return isset($res[$id]) ? $res[$id] : __('Unknown response code', 'tcom-payway-wc');
+        return isset($res[$id]) ? $res[$id] : __('Unknown response code', 'woocommerce-tcom-payway');
     }
 
     function check_tcompayway_response()
@@ -496,27 +513,27 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                     array('%s')
                 );
 
-                $order_note = __('PayWay Hrvatski Telekom payment successful. Unique Id: ', 'tcom-payway-wc') . $order_id;
+                $order_note = __('PayWay Hrvatski Telekom payment successful. Unique Id: ', 'woocommerce-tcom-payway') . $order_id;
                 $order->add_order_note(esc_html($order_note));
                 WC()->cart->empty_cart();
 
                 // Mark as on-hold (we're awaiting the payment).
-                $order->update_status('pending', __('Awaiting payment', 'tcom-payway-wc'));
+                $order->update_status('pending', __('Awaiting payment', 'woocommerce-tcom-payway'));
 
                 $mailer      = WC()->mailer();
                 $admin_email = get_option('admin_email', '');
 
                 $message = $mailer->wrap_message(
-                    __('Payment successful', 'tcom-payway-wc'),
+                    __('Payment successful', 'woocommerce-tcom-payway'),
                     sprintf(
-                        __('Payment on PayWay Hrvatski Telekom is successfully completed and order status is processed.', 'tcom-payway-wc'),
+                        __('Payment on PayWay Hrvatski Telekom is successfully completed and order status is processed.', 'woocommerce-tcom-payway'),
                         $order->get_order_number()
                     )
                 );
                 $mailer->send(
                     $admin_email,
                     sprintf(
-                        __('Payment for order no. %s was successful.', 'tcom-payway-wc'),
+                        __('Payment for order no. %s was successful.', 'woocommerce-tcom-payway'),
                         $order->get_order_number()
                     ),
                     $message
@@ -554,10 +571,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                     );
 
                     $text = '<html><meta charset="utf-8"><body><center>';
-                    $text .= esc_html__('A payment was not cancelled', 'tcom-payway-wc') . '<br>';
-                    $text .= esc_html__('Reason: ', 'tcom-payway-wc') . esc_html($this->get_response_codes($responseCode)) . '<br>';
-                    $text .= esc_html__('Order Id: ', 'tcom-payway-wc') . esc_html($order_id) . '<br>';
-                    $text .= esc_html__('Redirecting...', 'tcom-payway-wc');
+                    $text .= esc_html__('A payment was not cancelled', 'woocommerce-tcom-payway') . '<br>';
+                    $text .= esc_html__('Reason: ', 'woocommerce-tcom-payway') . esc_html($this->get_response_codes($responseCode)) . '<br>';
+                    $text .= esc_html__('Order Id: ', 'woocommerce-tcom-payway') . esc_html($order_id) . '<br>';
+                    $text .= esc_html__('Redirecting...', 'woocommerce-tcom-payway');
                     $text .= '</center><script>setTimeout(function(){ window.location.replace("' . esc_js($order->get_cancel_order_url()) . '"); },3000);</script></body></html>';
 
                     echo $text;
@@ -589,10 +606,10 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 );
 
                 $text = '<html><meta charset="utf-8"><body><center>';
-                $text .= esc_html__('A payment was not successful or declined', 'tcom-payway-wc') . '<br>';
-                $text .= esc_html__('Reason: ', 'tcom-payway-wc') . esc_html($errorCodes) . '<br>';
-                $text .= esc_html__('Order Id: ', 'tcom-payway-wc') . esc_html($order_id) . '<br>';
-                $text .= esc_html__('Redirecting...', 'tcom-payway-wc');
+                $text .= esc_html__('A payment was not successful or declined', 'woocommerce-tcom-payway') . '<br>';
+                $text .= esc_html__('Reason: ', 'woocommerce-tcom-payway') . esc_html($errorCodes) . '<br>';
+                $text .= esc_html__('Order Id: ', 'woocommerce-tcom-payway') . esc_html($order_id) . '<br>';
+                $text .= esc_html__('Redirecting...', 'woocommerce-tcom-payway');
                 $text .= '</center><script>setTimeout(function(){ window.location.replace("' . esc_js($order->get_cancel_order_url()) . '"); },3000);</script></body></html>';
 
                 echo $text;
