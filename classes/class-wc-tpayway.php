@@ -606,3 +606,4 @@ class WC_TPAYWAY extends WC_Payment_Gateway
         );
     }
 }
+    
