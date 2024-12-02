@@ -167,20 +167,20 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
 
 
-    function payment_fields()
-    {
+    function payment_fields() {
         // Check if description exists and safely output it
         if ($this->description) {
             echo wpautop(wptexturize(esc_html($this->description))); // Escape description for safety
         }
     }
+    
 
-    function receipt_page($order)
-    {
+    function receipt_page($order) {
         // Generate the IPG form and safely output the checkout message
         echo $this->generate_ipg_form($order);
         echo '<br>' . esc_html($this->checkout_msg) . '</p>'; // Correct the closing tag from </b> to </p>
     }
+    
 
     private function get_hnb_currency()
     {
@@ -210,45 +210,50 @@ class WC_TPAYWAY extends WC_Payment_Gateway
      *
      * @return void
      */
-    private function update_hnb_currency()
-    {
+    private function update_hnb_currency() {
         $file = __DIR__ . '/tecajnv2.json';
-
+    
         if (!file_exists($file)) {
             // Save file content only if file doesn't exist
-            file_put_contents($file, $this->get_hnb_currency());
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                WP_Filesystem();
+            }
+            $wp_filesystem->put_contents($file, $this->get_hnb_currency());
         } else {
             clearstatcache();
-
+    
             // If file exists and is not empty
             if (filesize($file) > 0) {
                 // If file is older than a day
                 if (time() - filemtime($file) > (24 * 3600)) {
-                    file_put_contents($file, $this->get_hnb_currency());
+                    $wp_filesystem->put_contents($file, $this->get_hnb_currency());
                 }
             } else {
                 // Handle case where file exists but is empty
-                file_put_contents($file, $this->get_hnb_currency());
+                $wp_filesystem->put_contents($file, $this->get_hnb_currency());
             }
         }
     }
+    
 
-    private function get_last_modified_hnb_file()
-    {
+    private function get_last_modified_hnb_file() {
         $file = __DIR__ . '/tecajnv2.json';
-
+    
         // Check if CURL extension is available
         if (!$this->curlExtension) {
             return esc_html__("HNB conversion is disabled due to missing CURL extension.", 'woocommerce-tcom-payway');
         }
-
+    
         // Check if file exists
         if (file_exists($file)) {
-            return date("d.m.Y H:i:s", filemtime($file));
+            return gmdate("d.m.Y H:i:s", filemtime($file)); // Changed to gmdate
         }
-
+    
         return esc_html__("HNB rates are not fetched from server.", 'woocommerce-tcom-payway');
     }
+    
 
     /**
      * Retrieve currency conversion rate by currency
@@ -256,54 +261,58 @@ class WC_TPAYWAY extends WC_Payment_Gateway
      * @param string $currency
      * @return float|string
      */
-    private function fetch_hnb_currency($currency)
-    {
+    private function fetch_hnb_currency($currency) {
         $file = __DIR__ . '/tecajnv2.json';
-
+    
         // Check if the file exists before attempting to read
         if (!file_exists($file)) {
             return esc_html__("Currency data not found.", 'woocommerce-tcom-payway');
         }
-
-        $filecontents = file_get_contents($file);
+    
+        $response = wp_remote_get($file); // Use wp_remote_get() instead of file_get_contents
+        if (is_wp_error($response)) {
+            return esc_html__("Error fetching file.", 'woocommerce-tcom-payway');
+        }
+    
+        $filecontents = wp_remote_retrieve_body($response);
         $jsonFile = json_decode($filecontents, true);
-
+    
         // Check for valid JSON decoding
         if (json_last_error() !== JSON_ERROR_NONE) {
             return esc_html__("Error decoding JSON data.", 'woocommerce-tcom-payway');
         }
-
+    
         // Loop through each currency and return the rate
         foreach ($jsonFile as $val) {
             if ($val['valuta'] === $currency) {
                 return floatval(str_replace(",", ".", $val['srednji_tecaj']));
             }
         }
-
+    
         // Return a default rate if the currency is not found
         return 1;
     }
+    
 
-    public function generate_ipg_form($order_id)
-    {
+    public function generate_ipg_form($order_id) {
         global $wpdb;
-
+    
         // Get order object
         $order = wc_get_order($order_id);
         $currency_symbol = get_woocommerce_currency();
         $order_total = $order->get_total();
-
+    
         // Define table name and check if transaction exists in the database
         $table_name = $wpdb->prefix . 'tpayway_ipg';
-
+    
         // Using prepare for safe query
         $check_order = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE transaction_id = %s", $order_id));
-
+    
         // Cache the result for future use if necessary
         if ($check_order === null) {
             $check_order = 0; // Fallback in case of null result
         }
-
+    
         if ($check_order > 0) {
             // Update existing order data using prepared statements
             $wpdb->update(
@@ -337,6 +346,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             );
         }
     }
+    
 
 
     private function determine_language($country_code)
