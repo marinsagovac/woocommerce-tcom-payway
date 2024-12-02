@@ -89,8 +89,9 @@ class WC_TPAYWAY extends WC_Payment_Gateway
      */
     public function load_textdomain()
     {
-        load_plugin_textdomain('woocommerce-tcom-payway', '', plugin_dir_path(__FILE__) . 'languages');
+        load_plugin_textdomain('woocommerce-tcom-payway', false, plugin_dir_path(__FILE__) . 'languages');
     }
+
 
 
     public function init_form_fields()
@@ -152,17 +153,18 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     {
         $hnbRatesUri = "<a href=\"" . esc_url($this->tecajnaHnbApi) . "\" target=\"_blank\">" . esc_html__('HNB rates', 'woocommerce-tcom-payway') . "</a>";
 
-        echo '<h3>' . __('PayWay Hrvatski Telekom payment gateway', 'woocommerce-tcom-payway') . '</h3>';
-        echo '<p>' . __('PayWay Hrvatski Telekom is a payment gateway from Hrvatski Telekom that provides payment gateway services as dedicated services to clients in Croatia.', 'woocommerce-tcom-payway') . '</p>';
+        echo '<h3>' . esc_html__('PayWay Hrvatski Telekom payment gateway', 'woocommerce-tcom-payway') . '</h3>';
+        echo '<p>' . esc_html__('PayWay Hrvatski Telekom is a payment gateway from Hrvatski Telekom that provides payment gateway services as dedicated services to clients in Croatia.', 'woocommerce-tcom-payway') . '</p>';
         echo '<table class="form-table">';
         $this->generate_settings_html();
         echo '</table>';
         echo '<p>';
-        echo '<p>' . __('HNB rates fetched: ', 'woocommerce-tcom-payway') . $this->get_last_modified_hnb_file() . '</p>';
+        echo '<p>' . esc_html__('HNB rates fetched: ', 'woocommerce-tcom-payway') . esc_html($this->get_last_modified_hnb_file()) . '</p>';
         echo '<p>' . esc_html__('Preferred currency will be EUR. Make sure that the default currency on your webshop is set to EUR.', 'woocommerce-tcom-payway') . '</p>';
-        echo '<p>' . __('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'woocommerce-tcom-payway') . $hnbRatesUri . '</p>';
+        echo '<p>' . esc_html__('Other currencies will be automatically calculated and sent to PayWay using HNB rates: USD (WordPress) to HRK (PayWay) using ', 'woocommerce-tcom-payway') . $hnbRatesUri . '</p>';
         echo '</p>';
     }
+
 
 
     function payment_fields()
@@ -186,27 +188,19 @@ class WC_TPAYWAY extends WC_Payment_Gateway
             return esc_html__("CURL extension is missing. Conversion is disabled.", 'woocommerce-tcom-payway');
         }
 
-        // Initialize cURL and handle safely
-        $ch = curl_init();
+        $response = wp_remote_get($this->tecajnaHnbApi);
 
-        curl_setopt($ch, CURLOPT_URL, $this->tecajnaHnbApi);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
-
-        $content = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            // Optionally, handle cURL error here
-            $error_message = curl_error($ch);
-            curl_close($ch);
+        if (is_wp_error($response)) {
+            $error_message = $response->get_error_message();
             return esc_html__("Error fetching data: ", 'woocommerce-tcom-payway') . esc_html($error_message);
         }
 
-        curl_close($ch);
+        $content = wp_remote_retrieve_body($response);
 
         // Return the raw content or process it as needed
         return $content;
     }
+
 
 
     /**
@@ -301,10 +295,17 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
         // Define table name and check if transaction exists in the database
         $table_name = $wpdb->prefix . 'tpayway_ipg';
+
+        // Using prepare for safe query
         $check_order = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table_name WHERE transaction_id = %s", $order_id));
 
+        // Cache the result for future use if necessary
+        if ($check_order === null) {
+            $check_order = 0; // Fallback in case of null result
+        }
+
         if ($check_order > 0) {
-            // Update existing order data
+            // Update existing order data using prepared statements
             $wpdb->update(
                 $table_name,
                 array(
@@ -335,103 +336,8 @@ class WC_TPAYWAY extends WC_Payment_Gateway
                 array('%s', '%s', '%s', '%s', '%f', '%s', '%s')
             );
         }
-
-        // Determine language based on customer country
-        $pgw_language = $this->determine_language($order->get_billing_country());
-        $pgw_language = strtoupper($pgw_language);
-
-        // Handle currency conversion if necessary
-        $wcml_settings = get_option('_wcml_settings'); // WooCommerce Multilingual - Multi Currency (WPML plugin)
-
-        if (!$wcml_settings) {
-            if ($currency_symbol === "EUR") {
-                $order_total = $order->get_total();
-            } else {
-                if ($this->curlExtension) {
-                    $order_total = $order->get_total() * $this->fetch_hnb_currency($currency_symbol);
-                }
-            }
-        } else {
-            $order_total = $order->get_total();
-        }
-
-        // Format values for submission
-        $order_format_value = str_pad(($order_total * 100), 12, '0', STR_PAD_LEFT);
-        $total_amount = number_format($order_total, 2, '', '');
-        $total_amount_request = number_format($order_total, 2, ',', '');
-
-        // Secret and shop data
-        $secret_key = $this->acq_id;
-        $pgw_shop_id = $this->shop_id;
-        $pgw_order_id = $order_id;
-        $pgw_amount = $total_amount;
-
-        // Customer information
-        $pgw_first_name = $order->get_billing_first_name();
-        $pgw_last_name = $order->get_billing_last_name();
-        $pgw_street = $order->get_billing_address_1() . ', ' . $order->get_billing_address_2();
-        $pgw_city = $order->get_billing_city();
-        $pgw_post_code = $order->get_billing_postcode();
-        $pgw_country = $order->get_billing_country();
-        $pgw_telephone = $order->get_billing_phone();
-        $pgw_email = $order->get_billing_email();
-
-        // Generate signature for security
-        $pgw_signature = hash('sha512', $pgw_shop_id . $secret_key . $pgw_order_id . $secret_key . $pgw_amount . $secret_key);
-
-        // Form fields for the PayWay gateway
-        $form_args = array(
-            // Mandatory fields
-            'ShopID'           => $pgw_shop_id,
-            'ShoppingCartID'   => $pgw_order_id,
-            'Version'          => $this->api_version,
-            'TotalAmount'      => $total_amount_request,
-            'ReturnURL'        => $this->get_return_url($order),
-            'ReturnErrorURL'   => $order->get_cancel_order_url(),
-            'CancelURL'        => $order->get_cancel_order_url(),
-            'Signature'        => $pgw_signature,
-
-            // Optional fields
-            'Lang'             => $pgw_language,
-            'CustomerFirstName'  => substr($pgw_first_name, 0, 50),
-            'CustomerLastName'   => substr($pgw_last_name, 0, 50),
-            'CustomerAddress'    => substr($pgw_street, 0, 100),
-            'CustomerCity'       => substr($pgw_city, 0, 50),
-            'CustomerZIP'        => substr($pgw_post_code, 0, 20),
-            'CustomerCountry'    => $pgw_country,
-            'CustomerEmail'      => substr($pgw_email, 0, 254),
-            'CustomerPhone'      => substr($pgw_telephone, 0, 20),
-            'ReturnMethod'       => 'POST',
-            'acq_id'             => $this->acq_id, // Secret key
-            'PurchaseAmt'        => $order_format_value,
-            'CurrencyCode'       => 978 // ISO 4217 code for EUR
-        );
-
-        // Generate hidden input fields
-        $form_args_array = array();
-        foreach ($form_args as $key => $value) {
-            $form_args_array[] = "<input type='hidden' name='" . esc_attr($key) . "' value='" . esc_attr($value) . "'/>";
-        }
-
-        // Determine the payment domain (test or live)
-        $pgDomain = 'https://form.payway.com.hr/authorization.aspx';
-        if ($this->pg_domain === 'test') {
-            $pgDomain = 'https://formtest.payway.com.hr/authorization.aspx';
-        }
-
-        // Return the form HTML with auto-submit JavaScript
-        return '<p></p>
-            <p>Total amount will be <b>' . esc_html(number_format($order_total, 2)) . ' ' . esc_html($currency_symbol) . '</b></p>
-            <form action="' . esc_url($pgDomain) . '" method="post" name="payway-authorize-form" id="payway-authorize-form" enctype="application/x-www-form-urlencoded">
-                ' . implode('', $form_args_array) . '
-                <input type="submit" class="button-alt" id="submit_ipg_payment_form" value="' . esc_attr__('Pay via PayWay', 'woocommerce-tcom-payway') . '" />
-                <a class="button cancel" href="' . esc_url($order->get_cancel_order_url()) . '">' . esc_html__('Cancel order &amp; restore cart', 'woocommerce-tcom-payway') . '</a>
-            </form>
-            <script type="text/javascript">
-                jQuery("#submit_ipg_payment_form").trigger("click");
-            </script>
-        ';
     }
+
 
     private function determine_language($country_code)
     {
@@ -519,20 +425,18 @@ class WC_TPAYWAY extends WC_Payment_Gateway
     }
 
     function check_tcompayway_response()
-    {
-        // Check if request method is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+{
+    // Check if request method is POST and nonce is valid
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payway_nonce']) && wp_verify_nonce($_POST['payway_nonce'], 'payway_nonce_action')) {
+
+        // Sanitize the ShoppingCartID and Amount
+        if (isset($_POST['ShoppingCartID'])) {
+            $order_id = sanitize_text_field($_POST['ShoppingCartID']);  // Ensure order ID is sanitized
         }
 
-        // Validate ShoppingCartID is present
-        if (empty($_POST['ShoppingCartID'])) {
-            return;
-        }
-
-        $order_id = sanitize_text_field($_POST['ShoppingCartID']);  // Ensure order ID is sanitized
         $order = wc_get_order($order_id);  // Get order object
-        $amount = isset($_POST['Amount']) ? $this->sanitize('Amount') : 0;  // Sanitize amount
+
+        $amount = isset($_POST['Amount']) ? sanitize_text_field($_POST['Amount']) : 0;  // Sanitize amount
         $status = isset($_POST['Success']) ? (int)$_POST['Success'] : 0;
         $reasonCode = isset($_POST['ApprovalCode']) ? (int)$_POST['ApprovalCode'] : 0;
 
@@ -616,7 +520,7 @@ class WC_TPAYWAY extends WC_Payment_Gateway
 
             // Handle failed transactions (response code 0)
             if ($_POST['Success'] === "0") {
-                $errorCodes = isset($_POST['ErrorCodes']) ? sanitize_text_field(json_encode($_POST['ErrorCodes'])) : '';
+                $errorCodes = isset($_POST['ErrorCodes']) ? sanitize_text_field(json_encode($_POST['ErrorCodes'])) : '';  // Sanitize error codes
 
                 $order->update_status('failed');
                 $order->add_order_note($this->get_response_codes($reasonCode) . " (Code $reasonCode)");
