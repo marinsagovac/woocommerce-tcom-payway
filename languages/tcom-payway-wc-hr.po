@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce Hrvatski Telekom PayWay\n"
+"Project-Id-Version: PayWay Hrvatski Telekom payment gateway for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-27 20:52+0000\n"
 "PO-Revision-Date: 2019-11-27 21:17+0000\n"
@@ -298,8 +298,8 @@ msgid "Redirecting..."
 msgstr "Preusmjeravanje ..."
 
 #. Name of the plugin
-msgid "WooCommerce PayWay Hrvatski Telekom"
-msgstr "WooCommerce PayWay Hrvatski Telekom"
+msgid "PayWay Hrvatski Telekom payment gateway for WooCommerce"
+msgstr "PayWay Hrvatski Telekom payment gateway for WooCommerce"
 
 #. URI of the plugin
 msgid "https://github.com/marinsagovac/woocommerce-tcom-payway"
