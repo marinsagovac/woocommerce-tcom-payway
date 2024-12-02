@@ -69,6 +69,10 @@ Old releases (deprecated):
 * Release [1.2](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.2)
 * Release [1.1](https://github.com/marinsagovac/woocommerce-tcom-payway/releases/tag/1.1)
 
+## Tested up to
+
+Tested up to: **6.7.1**
+
 ## INSTALLATION
 
 Download ZIP archive, upload via plugin page and apply package. Activate plugin. Change settings under Woocomerce settings page on the checkout page.
