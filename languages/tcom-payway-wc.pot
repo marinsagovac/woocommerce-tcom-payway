@@ -1,7 +1,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce PayWay Hrvatski Telekom\n"
+"Project-Id-Version: PayWay Hrvatski Telekom payment gateway for WooCommerce\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-27 20:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -288,7 +288,7 @@ msgid "Redirecting..."
 msgstr ""
 
 #. Name of the plugin
-msgid "WooCommerce PayWay Hrvatski Telekom"
+msgid "PayWay Hrvatski Telekom payment gateway for WooCommerce"
 msgstr ""
 
 #. URI of the plugin
